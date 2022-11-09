@@ -8,6 +8,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -40,7 +42,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.dangXuat:
+                savePreference("admin","admin",true,true);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
+        return true;
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -56,6 +67,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed(); // Thoát
         }
+    }
+
+    void savePreference(String ma, String pw, boolean isLogout, boolean status) {
+        SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
+        SharedPreferences.Editor editor = s.edit();
+        if (!status) { // Khong luu
+            editor.clear();
+        } else { // luu
+            editor.putString("U",ma);
+            editor.putString("P",pw);
+            editor.putBoolean("isLogout", isLogout);
+            editor.putBoolean("CHK",status);
+        }
+        editor.commit();
     }
 
 }
