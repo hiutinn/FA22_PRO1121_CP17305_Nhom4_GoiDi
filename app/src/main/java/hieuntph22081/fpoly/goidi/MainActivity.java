@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        replaceFragment(new QuanLyOrderFragment());
         this.setTitle(R.string.nav_order);
         navigationView.getMenu().getItem(0).setChecked(true);
+        replaceFragment(new MonAnFragment());
     }
 
     @Override

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/img_monAn"
+        android:src="@drawable/dish_haisan"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerVertical="true"/>
+    <LinearLayout
+        android:id="@+id/linear1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/img_monAn"
+        android:layout_marginLeft="20dp">
+        <TextView
+            android:id="@+id/tv_ten_mon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Hải Sản"
+            android:textSize="24dp"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/tv_gia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="180,000 đ"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#C53329"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/btn_giam"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:drawableLeft="@drawable/giam"
+            android:backgroundTint="#FFFFFF"
+            app:strokeColor="#CC1414"
+            app:strokeWidth="1dp" />
+        <TextView
+            android:id="@+id/tv_soLuong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/black"
+            android:layout_gravity="center"/>
+        <Button
+            android:id="@+id/btn_tang"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:drawableLeft="@drawable/tang"
+            android:backgroundTint="#CC1414"/>
+
+
+    </LinearLayout>
+</RelativeLayout>
