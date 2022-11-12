@@ -8,8 +8,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -27,6 +30,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
 
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -40,22 +48,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        replaceFragment(new QuanLyOrderFragment());
         this.setTitle(R.string.nav_order);
         navigationView.getMenu().getItem(0).setChecked(true);
-
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-
-        myRef.setValue("Hello, World!").addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(MainActivity.this, "Push success fully", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.dangXuat:
+                savePreference("admin","admin",true,false);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
+        return true;
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -71,6 +77,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed(); // Thoát
         }
+    }
+
+    void savePreference(String ma, String pw, boolean isLogout, boolean status) {
+        SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
+        SharedPreferences.Editor editor = s.edit();
+        if (!status) { // Khong luu
+            editor.clear();
+        } else { // luu
+            editor.putString("U",ma);
+            editor.putString("P",pw);
+            editor.putBoolean("isLogout", isLogout);
+            editor.putBoolean("CHK",status);
+        }
+        editor.commit();
     }
 
 }
