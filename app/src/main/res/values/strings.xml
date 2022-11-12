@@ -11,4 +11,9 @@
     <string name="nav_doanhThu">Doanh thu</string>
     <string name="nav_doiMatKhau">Đổi mật khẩu</string>
     <string name="nav_dangXuat">Đăng xuất</string>
+    <string name="login_app_name">Ứng dụng quản lý GoiDi Management</string>
+    <string name="dang_nhap_text">Đăng Nhập</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_remember_text">Remember ?</string>
 </resources>
