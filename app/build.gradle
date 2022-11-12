@@ -39,4 +39,9 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
+    //check permission
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+    //import libs
+
+
 }

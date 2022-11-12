@@ -42,18 +42,20 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
     public void onBindViewHolder(@NonNull userViewHolder holder, int position) {
         MonAn monAn = list.get(position);
         holder.img_monAn.setImageResource(monAn.getImg());
+        ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_XY;
+        holder.img_monAn.setScaleType(scaleType);
         holder.tv_tenMonAn.setText(monAn.getTen());
         holder.tv_gia.setText(String.valueOf(monAn.getGia()));
         AtomicInteger soLuong = new AtomicInteger();
         soLuong.set(monAn.getSoLuong());
-        holder.btn_tang.setOnClickListener(v -> {
-            soLuong.getAndIncrement();
-            holder.tv_soLuong.setText(String.valueOf(soLuong.get()));
-        });
-        holder.btn_giam.setOnClickListener(v -> {
-            soLuong.getAndDecrement();
-            holder.tv_soLuong.setText(String.valueOf(soLuong.get()));
-        });
+//        holder.btn_tang.setOnClickListener(v -> {
+//            soLuong.getAndIncrement();
+//            holder.tv_soLuong.setText(String.valueOf(soLuong.get()));
+//        });
+//        holder.btn_giam.setOnClickListener(v -> {
+//            soLuong.getAndDecrement();
+//            holder.tv_soLuong.setText(String.valueOf(soLuong.get()));
+//        });
     }
 
     @Override
@@ -65,7 +67,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
     }
 
     public class userViewHolder extends RecyclerView.ViewHolder {
-        ImageView img_monAn;
+        ImageView img_monAn,img_xoaMonAn;
         TextView tv_tenMonAn,tv_gia,tv_soLuong;
         Button btn_tang,btn_giam;
         public userViewHolder(@NonNull View itemView) {
@@ -73,12 +75,10 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
             img_monAn = itemView.findViewById(R.id.img_monAn);
             tv_tenMonAn = itemView.findViewById(R.id.tv_ten_mon);
             tv_gia = itemView.findViewById(R.id.tv_gia);
-            tv_soLuong = itemView.findViewById(R.id.tv_soLuong);
-            btn_tang = itemView.findViewById(R.id.btn_tang);
-            btn_giam = itemView.findViewById(R.id.btn_giam);
+            img_xoaMonAn = itemView.findViewById(R.id.img_xoaMonAn);
+//            tv_soLuong = itemView.findViewById(R.id.tv_soLuong);
+//            btn_tang = itemView.findViewById(R.id.btn_tang);
+//            btn_giam = itemView.findViewById(R.id.btn_giam);
         }
-    }
-    public class hihi{
-        int in;
     }
 }

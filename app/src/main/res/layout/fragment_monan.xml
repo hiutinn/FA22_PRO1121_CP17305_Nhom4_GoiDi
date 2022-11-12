@@ -9,5 +9,12 @@
         android:id="@+id/recycle_monAn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_float_themMonAn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_baseline_playlist_add_24"
+        android:backgroundTint="#CC1414"/>
 </FrameLayout>
