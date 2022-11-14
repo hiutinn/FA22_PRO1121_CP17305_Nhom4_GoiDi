@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#536DFE"
+    android:backgroundTint="#536DFE"
+    tools:context=".LoginActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@drawable/background_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="50dp">
+
+        <ImageView
+            android:id="@+id/loginImg"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/img" />
+
+        <TextView
+            android:id="@+id/loginAppName"
+            android:layout_below="@+id/loginImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/login_app_name"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/loginText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginAppName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="@string/dang_nhap_text"
+            android:textColor="#0386D0"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/loginTxtMaTT"
+            android:layout_width="291dp"
+            android:layout_height="51dp"
+            android:layout_below="@+id/loginText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/background_corner20_bordergray"
+            android:hint="@string/login_username_hint"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:selectAllOnFocus="true" />
+
+        <EditText
+            android:id="@+id/loginTxtPassword"
+            android:layout_width="291dp"
+            android:layout_height="51dp"
+            android:layout_below="@+id/loginTxtMaTT"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/background_corner20_bordergray"
+            android:hint="@string/login_password_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:selectAllOnFocus="true" />
+
+        <CheckBox
+            android:id="@+id/chkRemember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginTxtPassword"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="156dp"
+            android:text="@string/login_remember_text" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/loginLogo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#0386D0"
+            android:text="@string/dang_nhap_text" />
+
+        <ImageView
+            android:id="@+id/loginLogo"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/goidi" />
+
+
+    </RelativeLayout>
+</LinearLayout>
