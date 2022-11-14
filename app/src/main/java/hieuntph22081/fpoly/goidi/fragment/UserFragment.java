@@ -158,23 +158,20 @@ public class UserFragment extends Fragment {
                 }
             }
         });
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User user = new User();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("list_user");
-                String newName = edTenTV.getText().toString().trim();
-                user.setHoTen(newName);
-                myRef.child(String.valueOf(user.getMaTV())).updateChildren(user.toMap(), new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        Toast.makeText(getContext(), "Update thành công", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-                });
-                capNhatLv();
-            }
+        btnUpdate.setOnClickListener(view -> {
+            User user = new User();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("list_user");
+            String newName = edTenTV.getText().toString().trim();
+            user.setHoTen(newName);
+            myRef.child(String.valueOf(user.getMaTV())).updateChildren(user.toMap(), new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    Toast.makeText(getContext(), "Update thành công", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            capNhatLv();
         });
         dialog.show();
     }

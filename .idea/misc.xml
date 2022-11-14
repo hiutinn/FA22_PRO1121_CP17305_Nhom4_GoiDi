@@ -3,9 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/csstomtron2.xml" value="0.142" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/my_bg_1.xml" value="0.142" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/my_bg_2.xml" value="0.142" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/activity_login.xml" value="0.253125" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/fragment_demo.xml" value="0.253125" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/header_nav_layout.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/layout_item_demo.xml" value="0.2520833333333333" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/user_dialog.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/user_item.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/menu/nav_menu.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/GoiDi/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.129" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/GoiDi/app/src/main/res/layout/activity_main.xml" value="0.22735507246376813" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/GoiDi/app/src/main/res/layout/header_nav_layout.xml" value="0.22735507246376813" />

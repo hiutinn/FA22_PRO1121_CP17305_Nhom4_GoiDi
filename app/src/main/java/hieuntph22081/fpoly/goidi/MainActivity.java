@@ -66,11 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.quanLyUser:
                 setTitle("Quản lý người dùng");
-                FragmentManager manager = getSupportFragmentManager();
-                UserFragment thanhVienFragment = new UserFragment();
-                manager.beginTransaction()
-                        .replace(R.id.frameLayout, thanhVienFragment)
-                        .commit();
+                replaceFragment(new UserFragment());
                 break;
         }
         return true;
