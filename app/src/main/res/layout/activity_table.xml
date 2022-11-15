@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:text="MỜI CHỌN BÀN"
+        android:textColor="@color/teal_200"
+        android:textSize="60dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tb1"
+        android:layout_width="877dp"
+        android:layout_height="120dp"
+        android:text="Bàn Số 1"
+        android:textSize="40dp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:paddingTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/bt1"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:text="Đặt Bàn"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/tb2"
+        android:layout_width="877dp"
+        android:layout_height="120dp"
+        android:text="Bàn Số 2"
+        android:textSize="40dp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:paddingTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:text="Đặt Bàn"
+        android:layout_gravity="center"/>
+    <TextView
+    android:id="@+id/tb3"
+    android:layout_width="877dp"
+    android:layout_height="120dp"
+    android:text="Bàn Số 3"
+    android:textSize="40dp"
+    android:layout_gravity="center"
+    android:textStyle="bold"
+    android:paddingTop="20dp"
+    />
+
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:text="Đặt Bàn"
+        android:layout_gravity="center"/>
+    <TextView
+    android:id="@+id/tb4"
+    android:layout_width="877dp"
+    android:layout_height="120dp"
+    android:text="Bàn Số 4"
+    android:textSize="40dp"
+    android:layout_gravity="center"
+    android:textStyle="bold"
+    android:paddingTop="20dp"
+    />
+
+    <Button
+        android:id="@+id/bt4"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:text="Đặt Bàn"
+        android:layout_gravity="center"/>
+    <TextView
+    android:id="@+id/tb5"
+    android:layout_width="877dp"
+    android:layout_height="120dp"
+    android:text="Bàn Số 5"
+    android:textSize="40dp"
+    android:layout_gravity="center"
+    android:textStyle="bold"
+    android:paddingTop="20dp"
+    />
+
+    <Button
+        android:id="@+id/bt5"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:text="Đặt Bàn"
+        android:layout_gravity="center"/>
+
+
+    <TextView
+    android:id="@+id/tb6"
+    android:layout_width="877dp"
+    android:layout_height="120dp"
+    android:text="Bàn Số 6"
+    android:textSize="40dp"
+    android:layout_gravity="center"
+    android:textStyle="bold"
+    android:paddingTop="20dp"
+    />
+
+    <Button
+        android:id="@+id/bt6"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:text="Đặt Bàn"
+        android:layout_gravity="center"/>
+</LinearLayout>
