@@ -2,7 +2,10 @@ package hieuntph22081.fpoly.goidi;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,7 +20,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
-import hieuntph22081.fpoly.goidi.fragment.FragmentFeedBack;
+import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
+import hieuntph22081.fpoly.goidi.fragment.OrderFragment;
 import hieuntph22081.fpoly.goidi.fragment.UserFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,9 +48,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-//        replaceFragment(new QuanLyOrderFragment());
+        replaceFragment(new OrderFragment());
         this.setTitle(R.string.nav_order);
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        SpannableString s = new SpannableString("Đăng xuất");
+        s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
+        navigationView.getMenu().getItem(6).getSubMenu().getItem(1).setTitle(s);
     }
 
     @Override
@@ -60,12 +68,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 break;
             case R.id.quanLyFeedback:
-                replaceFragment(new FragmentFeedBack());
+                replaceFragment(new FeedBackFragment());
                 this.setTitle(R.string.nav_feedback);
                 break;
             case R.id.quanLyUser:
                 replaceFragment(new UserFragment());
                 this.setTitle(R.string.nav_user);
+                break;
+            case R.id.quanLyOrder:
+                replaceFragment(new OrderFragment());
+                this.setTitle(R.string.nav_order);
                 break;
         }
         drawerLayout.closeDrawer(navigationView);

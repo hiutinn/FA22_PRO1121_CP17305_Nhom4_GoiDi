@@ -39,7 +39,7 @@ import hieuntph22081.fpoly.goidi.adapter.FeedBackAdapter;
 import hieuntph22081.fpoly.goidi.model.FeedBack;
 import hieuntph22081.fpoly.goidi.model.FeedBack;
 
-public class FragmentFeedBack extends Fragment {
+public class FeedBackFragment extends Fragment {
     FloatingActionButton button;
     RecyclerView recyclerView;
     private FirebaseDatabase mDatabase;

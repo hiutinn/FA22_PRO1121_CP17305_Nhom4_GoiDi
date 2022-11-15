@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -91,6 +92,9 @@ public class UserFragment extends Fragment {
         int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.58);
         dialog.getWindow().setLayout(width, height);
+
+        TextView dialogUserTitle = dialog.findViewById(R.id.dialogUserTitle);
+        dialogUserTitle.setText("Thêm User");
 
         edtTenTv = dialog.findViewById(R.id.edtTenTV);
         edtPhone = dialog.findViewById(R.id.edtPhone);

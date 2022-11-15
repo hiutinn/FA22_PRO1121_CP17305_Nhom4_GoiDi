@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:background="@drawable/bg_white_corner_16"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp">
     <TextView
+        android:id="@+id/dialogUserTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
@@ -12,7 +14,7 @@
         android:textSize="16sp"
         android:gravity="center"
         android:background="@drawable/bg_yellow_corner_16_top_left_top_right"
-        android:text="Send Your Feedback"
+        android:text="Thêm User"
         android:textStyle="bold"
 
         />

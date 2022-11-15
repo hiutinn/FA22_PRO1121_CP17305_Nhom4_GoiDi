@@ -3,25 +3,25 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/quanLyOrder"
             android:title="@string/nav_order"
-            android:icon="@drawable/ic_baseline_play_arrow_24"/>
+            android:icon="@drawable/ic_order"/>
         <item android:id="@+id/quanLyUser"
             android:title="@string/nav_user"
-            android:icon="@drawable/ic_baseline_play_arrow_24"/>
+            android:icon="@drawable/ic_user"/>
         <item android:id="@+id/quanLyTable"
             android:title="@string/nav_table"
-            android:icon="@drawable/ic_baseline_play_arrow_24"/>
+            android:icon="@drawable/ic_table"/>
         <item android:id="@+id/quanLyDish"
             android:title="@string/nav_dish"
-            android:icon="@drawable/ic_baseline_play_arrow_24"/>
-        <item android:id="@+id/quanLyOrderDish"
-            android:title="@string/nav_order_dish"
-            android:icon="@drawable/ic_baseline_play_arrow_24"/>
+            android:icon="@drawable/ic_dish"/>
+<!--        <item android:id="@+id/quanLyOrderDish"-->
+<!--            android:title="@string/nav_order_dish"-->
+<!--            android:icon="@drawable/ic_baseline_play_arrow_24"/>-->
         <item android:id="@+id/quanLyFeedback"
             android:title="@string/nav_feedback"
-            android:icon="@drawable/ic_baseline_play_arrow_24"/>
+            android:icon="@drawable/ic_feedback"/>
     </group>
 
-    <item android:title="Thống kê">
+    <item android:title="">
         <menu>
             <group android:checkableBehavior="single">
                 <item android:id="@+id/top10Dish"
@@ -36,7 +36,7 @@
             </group>
         </menu>
     </item>
-    <item android:title="Người dùng">
+    <item android:title="">
         <menu>
             <group android:checkableBehavior="single">
                 <item android:id="@+id/doiMatKhau"

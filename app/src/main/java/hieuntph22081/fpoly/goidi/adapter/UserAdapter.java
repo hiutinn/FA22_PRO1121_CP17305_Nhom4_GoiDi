@@ -122,6 +122,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         int height = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.58);
         dialog.getWindow().setLayout(width, height);
 
+        TextView dialogUserTitle = dialog.findViewById(R.id.dialogUserTitle);
+        dialogUserTitle.setText("Sửa User");
+
         edtTenTv = dialog.findViewById(R.id.edtTenTV);
         edtPhone = dialog.findViewById(R.id.edtPhone);
         rdoRoleAdmin = dialog.findViewById(R.id.rdoRoleAdmin);
