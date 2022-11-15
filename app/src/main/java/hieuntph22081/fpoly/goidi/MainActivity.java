@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
@@ -22,7 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import hieuntph22081.fpoly.goidi.fragment.UserFragment;
+import hieuntph22081.fpoly.goidi.fragment.FragmentFeedBack;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        replaceFragment(new QuanLyOrderFragment());
         this.setTitle(R.string.nav_order);
         navigationView.getMenu().getItem(0).setChecked(true);
-
     }
 
     @Override
@@ -64,10 +62,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.quanLyUser:
-                setTitle("Quản lý người dùng");
-                replaceFragment(new UserFragment());
+            case R.id.quanLyFeedback:
+                replaceFragment(new FragmentFeedBack());
                 break;
+
         }
         return true;
     }
