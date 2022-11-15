@@ -1,5 +1,12 @@
 package hieuntph22081.fpoly.goidi;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,20 +15,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import hieuntph22081.fpoly.goidi.fragment.FragmentFeedBack;
+import hieuntph22081.fpoly.goidi.fragment.UserFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
@@ -64,9 +61,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.quanLyFeedback:
                 replaceFragment(new FragmentFeedBack());
+                this.setTitle(R.string.nav_feedback);
                 break;
-
+            case R.id.quanLyUser:
+                replaceFragment(new UserFragment());
+                this.setTitle(R.string.nav_user);
+                break;
         }
+        drawerLayout.closeDrawer(navigationView);
         return true;
     }
 
