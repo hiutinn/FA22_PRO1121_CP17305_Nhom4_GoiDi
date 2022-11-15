@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,6 +44,7 @@ public class UserFragment extends Fragment {
     Dialog dialog;
     EditText edMaTV, edTenTV, ednamSinh;
     Button btnsave, btncancel, btnUpdate;
+    RadioButton rdoKhach, rdoAdmin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,6 +131,7 @@ public class UserFragment extends Fragment {
             edTenTV.setText(String.valueOf(item.getHoTen()));
             ednamSinh.setText(String.valueOf(item.getNamSinh()));
         }
+
         btncancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +176,7 @@ public class UserFragment extends Fragment {
             });
             capNhatLv();
         });
+
         dialog.show();
     }
 
