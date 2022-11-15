@@ -25,22 +25,45 @@
         android:padding="16dp"
         android:orientation="vertical"
         >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:text="Please send us your feedback"
-            android:textStyle="bold"
-
-            />
         <EditText
-            android:id="@+id/edt_feedback"
+            android:id="@+id/edt_idFeedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_white_corner_10_border_gray"
             android:layout_marginTop="16dp"
-            android:hint="Feedback"
+            android:hint="id feedback"
+            android:padding="12dp"
+
+            />
+
+
+        <EditText
+            android:id="@+id/edt_idUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_corner_10_border_gray"
+            android:layout_marginTop="16dp"
+            android:hint="id user"
+            android:padding="12dp"
+
+            />
+        <EditText
+            android:id="@+id/edt_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_corner_10_border_gray"
+            android:layout_marginTop="16dp"
+            android:hint="Content"
+            android:padding="12dp"
+
+            />
+        <EditText
+            android:id="@+id/edt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_corner_10_border_gray"
+            android:layout_marginTop="16dp"
+            android:hint="Date"
             android:padding="12dp"
 
             />

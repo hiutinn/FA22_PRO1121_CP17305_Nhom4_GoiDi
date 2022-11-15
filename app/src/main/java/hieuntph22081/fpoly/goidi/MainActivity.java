@@ -21,6 +21,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import hieuntph22081.fpoly.goidi.fragment.FragmentFeedBack;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -60,6 +62,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 finish();
                 break;
+            case R.id.quanLyFeedback:
+                replaceFragment(new FragmentFeedBack());
+                break;
+
         }
         return true;
     }
