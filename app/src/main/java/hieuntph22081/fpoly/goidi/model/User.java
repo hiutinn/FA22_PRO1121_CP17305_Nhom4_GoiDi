@@ -4,55 +4,56 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
-    private int maTV, phone;
-    private String hoTen;
-    private String namSinh;
+    private String id, name, phone;
+    private int role;
 
     public User() {
     }
 
-    public int getMaTV() {
-        return maTV;
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("phone", phone);
+        result.put("role", role);
+        return result;
     }
 
-    public void setMaTV(int maTV) {
-        this.maTV = maTV;
+    public User(String id, String name, String phone, int role) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.role = role;
     }
 
-    public int getPhone() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getHoTen() {
-        return hoTen;
+    public int getRole() {
+        return role;
     }
 
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
-    }
-
-    public String getNamSinh() {
-        return namSinh;
-    }
-
-    public void setNamSinh(String namSinh) {
-        this.namSinh = namSinh;
-    }
-
-    public User(int maTV, int phone, String hoTen, String namSinh) {
-        this.maTV = maTV;
-        this.phone = phone;
-        this.hoTen = hoTen;
-        this.namSinh = namSinh;
-    }
-
-    public Map<String, Object> toMap(){
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("hoTen", hoTen);
-        return result;
+    public void setRole(int role) {
+        this.role = role;
     }
 }

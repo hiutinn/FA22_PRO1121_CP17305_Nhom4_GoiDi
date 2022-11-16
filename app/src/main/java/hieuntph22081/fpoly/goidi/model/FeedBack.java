@@ -1,26 +1,26 @@
 package hieuntph22081.fpoly.goidi.model;
 
 public class FeedBack {
-    private int id;
+    private String id;
     private String content;
-    private String userid;
-    private int date;
+    private User user;
+    private String date;
 
     public FeedBack() {
     }
 
-    public FeedBack(int id, String content, String userid, int date) {
+    public FeedBack(String id, String content, User user, String date) {
         this.id = id;
         this.content = content;
-        this.userid = userid;
+        this.user = user;
         this.date = date;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -32,19 +32,19 @@ public class FeedBack {
         this.content = content;
     }
 
-    public String getUserid() {
-        return userid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }
