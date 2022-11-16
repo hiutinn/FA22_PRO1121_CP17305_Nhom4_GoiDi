@@ -3,11 +3,11 @@ package hieuntph22081.fpoly.goidi.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Instrumentation;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,11 +18,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,31 +31,43 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-import hieuntph22081.fpoly.goidi.MainActivity;
 import hieuntph22081.fpoly.goidi.R;
-import hieuntph22081.fpoly.goidi.adapter.LoaiMonAnRecycleAdapter;
 import hieuntph22081.fpoly.goidi.adapter.MonAnRecycleAdapter;
-import hieuntph22081.fpoly.goidi.model.LoaiMonAn;
-import hieuntph22081.fpoly.goidi.model.MonAn;
+import hieuntph22081.fpoly.goidi.model.Dish;
 
 
 public class MonAnFragment extends Fragment implements View.OnClickListener {
-    private MonAn monAn;
     private MonAnRecycleAdapter adapter;
-    private List<MonAn> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private FloatingActionButton actionButton;
-    public static final int PICK_IMAGE = 1;
-    public static final int REQUEST_CAMERA = 2;
     private ImageView img;
+    private StorageReference storageRef;
+    private DatabaseReference databaseRef;
+    private Uri uri;
+    private int check = 0;
+    private List<Dish> listDish = new ArrayList<>();
+    private String linkUri="";
 
     public MonAnFragment() {
         // Required empty public constructor
@@ -87,57 +97,81 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         actionButton.setOnClickListener(this);
         actionButton.setColorFilter(Color.WHITE);
         recyclerView = view.findViewById(R.id.recycle_monAn);
-        loadData();
-        onResume();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter = new MonAnRecycleAdapter(getActivity());
-        adapter.setData(list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("Dish");
+        getListDishFromFireBase();
+        adapter = new MonAnRecycleAdapter(getActivity(), new MonAnRecycleAdapter.IClickListener() {
+            @Override
+            public void OnClickUpdateItem(Dish dish) {
+                openDiaLogUpdateDish(dish);
+            }
+        });
+        adapter.setData(listDish);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
     }
 
+    public void getListDishFromFireBase(){
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listDish.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Dish dish = dataSnapshot.getValue(Dish.class);
+                    listDish.add(dish);
+                }
+                adapter.setData(listDish);
+            }
+           @Override
+           public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_float_themMonAn:
                 diaLogAddMonAn();
                 break;
         }
     }
-    public void loadData(){
-        list.add(new MonAn(1,"Lẩu riêu cua",100000,R.drawable.dish_thai,0));
-        list.add(new MonAn(1,"Lẩu riêu cua",100000,R.drawable.dish_nhatban,0));
-        list.add(new MonAn(1,"Lẩu riêu cua",100000,R.drawable.dish_haisan,0));
-        list.add(new MonAn(1,"Lẩu riêu cua",100000,R.drawable.dish_nuong,0));
-    }
-    public void diaLogAddMonAn(){
+    public void diaLogAddMonAn() {
+        Calendar calendar = Calendar.getInstance();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_monan,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_monan, null);
         img = view.findViewById(R.id.img_diaLogMonAn_anh);
-        EditText ed_ten = view.findViewById(R.id.tv_ten_mon);
-        EditText ed_gia = view.findViewById(R.id.tv_gia);
+        EditText ed_ten = view.findViewById(R.id.ed_diaLogMonAn_ten);
+        EditText ed_gia = view.findViewById(R.id.ed_diaLogMonAn_gia);
         builder.setView(view);
+
         AlertDialog alertDialog = builder.create();
         img.setOnClickListener(v -> {
             requestPermission();
         });
         view.findViewById(R.id.btn_diaLogMonAn_luu).setOnClickListener(v -> {
-            Log.e("size", list.size()+"");
-            Log.e("id",img.getResources()+"");
+            if(check == 0){
+                uploadGallery(uri,calendar);
+            }
+            if(check==1){
+                uploadCamera(calendar);
+            }
+            Dish monAn = new Dish("dish"+calendar.getTimeInMillis(), ed_ten.getText().toString(),Double.parseDouble(ed_gia.getText().toString()), "");
+            databaseRef.child("dish"+calendar.getTimeInMillis()).setValue(monAn);
+            alertDialog.cancel();
         });
         view.findViewById(R.id.btn_diaLogMonAn_huy).setOnClickListener(v -> {
             alertDialog.cancel();
         });
         alertDialog.show();
 
-    }public void diaLogGalleryOrCamera(){
-        AlertDialog.Builder  builder = new AlertDialog.Builder(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_gallery_or_camera,null);
+    }
+
+    public void diaLogGalleryOrCamera() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_gallery_or_camera, null);
         LinearLayout linear_camera = view.findViewById(R.id.linear_camera);
         LinearLayout linear_gallery = view.findViewById(R.id.linear_gallery);
         builder.setView(view);
@@ -149,20 +183,24 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         AlertDialog alertDialog = builder.create();
         linear_camera.setOnClickListener(v -> {
             cameraIntent();
+            check = 1;
             alertDialog.cancel();
         });
         linear_gallery.setOnClickListener(v -> {
             galleryIntent();
+            check =0;
             alertDialog.cancel();
         });
         alertDialog.show();
     }
-    public void requestPermission(){
+
+    public void requestPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 diaLogGalleryOrCamera();
             }
+
             @Override
             public void onPermissionDenied(List<String> deniedPermissions) {
                 Toast.makeText(getActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
@@ -175,15 +213,15 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
                 .check();
     }
 
-    public void galleryIntent(){
+    public void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        activityResultLauncher_galeery.launch(Intent.createChooser(intent,"Select Picture"));
+        activityResultLauncher_gallery.launch(Intent.createChooser(intent, "Select Picture"));
         //startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
-    public void cameraIntent(){
+    public void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         activityResultLauncher_camera.launch(intent);
         //startActivityForResult(intent, REQUEST_CAMERA);
@@ -204,19 +242,19 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
 //    }
 
 
-    private ActivityResultLauncher<Intent> activityResultLauncher_galeery = registerForActivityResult(
+    private ActivityResultLauncher<Intent> activityResultLauncher_gallery = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     Intent data = result.getData();
-                    if (result.getResultCode() == Activity.RESULT_OK){
-                        if(data == null){
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (data == null) {
                             return;
                         }
-                        Uri uri =data.getData();
+                        uri = data.getData();
                         try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),uri);
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
                             img.setImageBitmap(bitmap);
                             ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_XY;
                             img.setScaleType(scaleType);
@@ -233,7 +271,10 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     Intent data = result.getData();
-                    if(result.getResultCode() == Activity.RESULT_OK){
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (data == null) {
+                            return;
+                        }
                         Bitmap photo = (Bitmap) data.getExtras().get("data");
                         img.setImageBitmap(photo);
                         ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_XY;
@@ -242,4 +283,146 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
                 }
             }
     );
+
+    private void uploadGallery(Uri uri,Calendar calendar) {
+        if (uri != null) {
+            storageRef = FirebaseStorage.getInstance().getReference("image/Dish"+ calendar.getTimeInMillis());
+            storageRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    databaseRef.child("dish"+calendar.getTimeInMillis()+"/img").setValue(uri.toString());
+                                    Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+
+    private void uploadCamera(Calendar calendar) {
+        Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        storageRef = FirebaseStorage.getInstance().getReference("image/dish" + calendar.getTimeInMillis()  );
+        storageRef.putBytes(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
+                                databaseRef.child("dish"+calendar.getTimeInMillis()+"/img").setValue(uri.toString());
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void upDateGallery(Uri uri,Dish dish) {
+        Calendar calendar = Calendar.getInstance();
+        if (uri != null) {
+            storageRef = FirebaseStorage.getInstance().getReference("image/Dish"+ calendar.getTimeInMillis());
+            storageRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    databaseRef.child(dish.getId()+"/img").setValue(uri.toString());
+                                    Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+    private void upDateCamera(Dish dish) {
+        Calendar calendar = Calendar.getInstance();
+        Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        storageRef = FirebaseStorage.getInstance().getReference("image/dish" + calendar.getTimeInMillis()  );
+        storageRef.putBytes(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
+                                databaseRef.child(dish.getId()+"/img").setValue(uri.toString());
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void openDiaLogUpdateDish(Dish dish){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_monan, null);
+        img = view.findViewById(R.id.img_diaLogMonAn_anh);
+        EditText ed_ten = view.findViewById(R.id.ed_diaLogMonAn_ten);
+        EditText ed_gia = view.findViewById(R.id.ed_diaLogMonAn_gia);
+        ed_ten.setText(dish.getTen());
+        ed_gia.setText(String.valueOf(dish.getGia()));
+        Glide.with(getActivity()).load(dish.getImg()).into(img);
+        ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_XY;
+        img.setScaleType(scaleType);
+        builder.setView(view);
+        AlertDialog alertDialog = builder.create();
+        img.setOnClickListener(v -> {
+            requestPermission();
+        });
+        view.findViewById(R.id.btn_diaLogMonAn_luu).setOnClickListener(v -> {
+            if(check == 0){
+                upDateGallery(uri,dish);
+            }
+            if(check==1){
+                upDateCamera(dish);
+            }
+            String tenDish = ed_ten.getText().toString();
+            double giaDish = Double.parseDouble(ed_gia.getText().toString());
+            Dish dish1 = new Dish(tenDish,giaDish,linkUri);
+            databaseRef.child(String.valueOf(dish.getId())).updateChildren(dish1.toMap(), new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    Toast.makeText(getActivity(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                }
+            });
+            alertDialog.cancel();
+        });
+        view.findViewById(R.id.btn_diaLogMonAn_huy).setOnClickListener(v -> {
+            alertDialog.cancel();
+        });
+        alertDialog.show();
+    }
 }

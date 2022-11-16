@@ -43,13 +43,13 @@
             android:layout_height="300dp"/>
     </FrameLayout>
     <EditText
-        android:id="@+id/tv_diaLogMonAn_ten"
+        android:id="@+id/ed_diaLogMonAn_ten"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Tên món: Lẩu riêu cua"
         android:layout_margin="10dp"/>
     <EditText
-        android:id="@+id/tv_diaLogMonAn_gia"
+        android:id="@+id/ed_diaLogMonAn_gia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Giá: 180000 đ"
