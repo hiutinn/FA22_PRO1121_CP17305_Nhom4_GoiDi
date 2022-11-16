@@ -1,13 +1,5 @@
 package hieuntph22081.fpoly.goidi;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,12 +8,21 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
+import hieuntph22081.fpoly.goidi.model.Dish;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
@@ -51,6 +52,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.setTitle(R.string.nav_order);
         navigationView.getMenu().getItem(0).setChecked(true);
         replaceFragment(new MonAnFragment());
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();;
+        DatabaseReference myRef = database.getReference("monAn") ;
+        Dish monAn = new Dish();
+        myRef.child(String.valueOf(monAn.getId())).setValue(monAn)
+                .addOnSuccessListener(unused ->
+                Toast.makeText(this, "Insert successfully", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -63,7 +72,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 finish();
                 break;
+            case R.id.doanhThu:
+                replaceFragment(new DoanhThuFragment());
+                break;
         }
+        drawerLayout.closeDrawer(navigationView);
         return true;
     }
 
