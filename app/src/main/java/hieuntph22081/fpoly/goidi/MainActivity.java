@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new DoanhThuFragment());
                 this.setTitle(R.string.nav_doanhThu);
                 break;
+//            case R.id.quanLyTable:
+//                replaceFragment(new DoanhThuFragment());
+//                this.setTitle(R.string.nav_doanhThu);
+//                break;
         }
         drawerLayout.closeDrawer(navigationView);
         return true;
