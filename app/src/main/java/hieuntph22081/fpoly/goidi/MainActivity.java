@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import hieuntph22081.fpoly.goidi.fragment.FragmentFeedBack;
+import hieuntph22081.fpoly.goidi.fragment.FragmentTable;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.quanLyFeedback:
                 replaceFragment(new FragmentFeedBack());
                 break;
-
+            case R.id.quanLyTable:
+                replaceFragment(new FragmentTable());
         }
         return true;
     }
