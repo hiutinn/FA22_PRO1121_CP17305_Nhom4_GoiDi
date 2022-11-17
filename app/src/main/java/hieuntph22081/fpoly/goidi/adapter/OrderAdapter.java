@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nex3z.flowlayout.FlowLayout;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
         holder.tvOrderUser.setText("Khách hàng: " + order.getUser().getName());
-        holder.tvOrderTotal.setText("Tổng tiền: " + order.getTotal());
+        holder.tvOrderTotal.setText("Tổng tiền: " + formatCurrency(order.getTotal()) );
 
         holder.recyclerViewDishes.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         adapter = new OrderDishAdapter(context, order.getDishes());
@@ -71,10 +72,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
 
         });
-        holder.imgDelete.setOnClickListener(v -> {
+    }
 
-        });
-
+    public String formatCurrency(double money) {
+        String pattern="###,###.### VNĐ";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        return myFormatter.format(money);
     }
 
     @Override

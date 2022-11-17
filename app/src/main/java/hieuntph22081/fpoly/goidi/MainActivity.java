@@ -20,7 +20,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
+import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
+import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
 import hieuntph22081.fpoly.goidi.fragment.OrderFragment;
 import hieuntph22081.fpoly.goidi.fragment.UserFragment;
 
@@ -78,6 +80,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.quanLyOrder:
                 replaceFragment(new OrderFragment());
                 this.setTitle(R.string.nav_order);
+                break;
+            case R.id.quanLyDish:
+                replaceFragment(new MonAnFragment());
+                this.setTitle(R.string.nav_dish);
+                break;
+            case R.id.doanhThu:
+                replaceFragment(new DoanhThuFragment());
+                this.setTitle(R.string.nav_doanhThu);
                 break;
         }
         drawerLayout.closeDrawer(navigationView);
