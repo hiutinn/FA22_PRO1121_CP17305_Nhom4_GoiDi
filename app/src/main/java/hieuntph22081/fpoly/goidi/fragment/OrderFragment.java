@@ -82,21 +82,20 @@ public class OrderFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
         Order order = new Order();
-        order.setId("1");
+        order.setId("2");
 
-        order.setDate("16/11/2022");
-        order.setStartTime("17:00");
-        order.setEndTime("19:00");
-        order.setTable(new Table(4));
-        order.setStatus(0);
+        order.setDate("13/11/2022");
+        order.setStartTime("15:00");
+        order.setEndTime("17:00");
+        order.setTable(new Table(8));
+        order.setStatus(2);
         order.setUser(new User("user1668565419268","Hieu", "0379103490", 0));
 
-        Dish dish = new Dish("id1668572509373", "Lau rieu cua",
-                "https://firebasestorage.googleapis.com/v0/b/goidi-f919e.appspot.com/o/image%2Fdish1668577048011?alt=media&token=6e59ded3-8826-4dca-8a1b-d27556ea0491",
-                0, 100000);
+        Dish dish = new Dish("id1668572509373", "Lau rieu cua",100000,
+                "https://firebasestorage.googleapis.com/v0/b/goidi-f919e.appspot.com/o/image%2Fdish1668577048011?alt=media&token=6e59ded3-8826-4dca-8a1b-d27556ea0491");
         dishes.add(new OrderDish(dish,3));
+        dishes.add(new OrderDish(dish,1));
         order.setDishes(dishes);
-        Log.e("dishes", order.getDishes().size()+"" );
         order.setTotal();
         myRef.child("orders").child(order.getId()).setValue(order);
     }
