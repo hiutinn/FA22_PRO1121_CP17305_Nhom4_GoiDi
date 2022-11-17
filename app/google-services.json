@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "652152491104",
+    "firebase_url": "https://goidi-f919e-default-rtdb.firebaseio.com",
     "project_id": "goidi-f919e",
     "storage_bucket": "goidi-f919e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:652152491104:android:147b07fd03478180890705",
+        "mobilesdk_app_id": "1:652152491104:android:bdc91dc46abaf33e890705",
         "android_client_info": {
           "package_name": "hieuntph22081.fpoly.goidi"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "652152491104-k5r57gtu63c7rkrkgv9fr2i9sarascd7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hieuntph22081.fpoly.goidi",
+            "certificate_hash": "7f37c48cae3f8183102437e995cad07d2e9dfc02"
+          }
+        },
         {
           "client_id": "652152491104-5a8n0e7km934kmm7v9ii21jfubua8hdb.apps.googleusercontent.com",
           "client_type": 3
