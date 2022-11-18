@@ -73,14 +73,14 @@ public class FragmentTable extends Fragment {
                 @Override
                 public void onClick(View v) {
                     int idtable= Integer.parseInt(edt_idtable.getText().toString());
-                   Table table= new Table(idtable);
+//                   Table table= new Table(idtable);
 
-                    myRef.setValue(table).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(requireActivity(), "table Successfuldsssxly", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    myRef.setValue(table).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            Toast.makeText(requireActivity(), "table Successfuldsssxly", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
             });
 

@@ -49,6 +49,14 @@
                     android:text="0379103490"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tvSoLan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvPhone"
+                    android:layout_marginTop="10dp"
+                    android:text="23"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/imgDelete"

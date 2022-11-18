@@ -1,6 +1,7 @@
 package hieuntph22081.fpoly.goidi.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
@@ -67,6 +69,7 @@ public class DoanhThuFragment extends Fragment {
         ed_denNgay = view.findViewById(R.id.ed_DT_denNgay);
         tv_doanhThu = view.findViewById(R.id.tv_doanhThu);
         Calendar calendar = Calendar.getInstance();
+        timePickerDialog(calendar,ed_tuNgay);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
@@ -102,10 +105,12 @@ public class DoanhThuFragment extends Fragment {
     private double getTungDoanhThu(Order order) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         double total = 0;
+        //13/11 so sanh 17/11 =-1
+        //17/11 so sanh 13/11 = 1
         try {
             Date fromDate = format.parse(ed_tuNgay.getText().toString());
             Date toDate = format.parse(ed_denNgay.getText().toString());
-            Log.e("TAG2", ""+fromDate.toString() + "  " + toDate.toString() );
+            Log.e("TAG2", ""+fromDate.toString() + "  " + toDate.toString());
             Date orderDate = format.parse(order.getDate());
             if (orderDate.compareTo(fromDate) >=0 && orderDate.compareTo(toDate) <= 0 && order.getStatus() == 2) {
                 total += order.getTotal();
@@ -125,6 +130,21 @@ public class DoanhThuFragment extends Fragment {
         },year,month,day);
         datePickerDialog.show();
     }
+
+    private void timePickerDialog(Calendar mcurrentTime, EditText editText){
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                editText.setText(selectedHour + ":" + selectedMinute);
+            }
+        }, hour, minute,true);
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }
+
 
     public String formatCurrency(double money) {
         String pattern="###,###.### VNĐ";

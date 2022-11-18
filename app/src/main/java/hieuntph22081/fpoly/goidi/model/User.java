@@ -1,11 +1,15 @@
 package hieuntph22081.fpoly.goidi.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User {
+public class User implements Serializable {
     private String id, name, phone;
     private int role;
+    private int soLan;
+
+
 
     public User() {
     }
@@ -23,6 +27,14 @@ public class User {
         this.name = name;
         this.phone = phone;
         this.role = role;
+    }
+
+    public User(String id, String name, String phone, int role, int soLan) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.role = role;
+        this.soLan = soLan;
     }
 
     public String getId() {
@@ -55,5 +67,13 @@ public class User {
 
     public void setRole(int role) {
         this.role = role;
+    }
+
+    public int getSoLan() {
+        return soLan;
+    }
+
+    public void setSoLan(int soLan) {
+        this.soLan = soLan;
     }
 }
