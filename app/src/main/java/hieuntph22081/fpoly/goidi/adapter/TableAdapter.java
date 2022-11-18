@@ -1,5 +1,6 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
+
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +39,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
         myRef = mDatabase.getReference("tables");
     }
 
+
     public void setTableList(List<Table> tableList) {
         TableList = tableList;
         notifyDataSetChanged();
@@ -46,12 +49,14 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
     @Override
     public TableAdapter.ViewHodler onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_table, parent, false);
+
         return new ViewHodler(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TableAdapter.ViewHodler holder, int position) {
         Table table = TableList.get(position);
+
         if (table == null)
             return;
         holder.tvNumber.setText("Bàn số " + table.getNumber());
@@ -87,10 +92,12 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
         btn_no1.setOnClickListener(v -> dialog.dismiss());
         dialog.setCancelable(true);
         dialog.show();
+
     }
 
     @Override
     public int getItemCount() {
+
         return (TableList == null) ? 0 : TableList.size();
     }
 
@@ -105,3 +112,4 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
         }
     }
 }
+

@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Table {
+
     String id;
     int seat;
     int number;
 
+
     public Table() {
     }
+
 
     public Table(String id, int seat, int number) {
         this.id = id;
@@ -23,6 +26,7 @@ public class Table {
 
     public void setId(String id) {
         this.id = id;
+
     }
 
     public int getSeat() {
