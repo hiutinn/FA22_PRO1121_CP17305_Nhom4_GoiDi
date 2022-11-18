@@ -22,10 +22,13 @@ import hieuntph22081.fpoly.goidi.model.OrderDish;
 public class OrderDishAdapter extends RecyclerView.Adapter<OrderDishAdapter.OrderDishViewHolder> {
     Context context;
     List<OrderDish> list;
-
-    public OrderDishAdapter(Context context, List<OrderDish> list) {
+    public OrderDishAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setData(List<OrderDish> list) {
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -37,6 +40,8 @@ public class OrderDishAdapter extends RecyclerView.Adapter<OrderDishAdapter.Orde
     @Override
     public void onBindViewHolder(@NonNull OrderDishViewHolder holder, int position) {
         OrderDish orderDish = list.get(position);
+        if (orderDish == null)
+            return;
         holder.tvName.setText(orderDish.getDish().getTen());
         holder.tvPrice.setText(String.valueOf(orderDish.getDish().getGia()));
         holder.tvQuantity.setText(String.valueOf(orderDish.getQuantity()));

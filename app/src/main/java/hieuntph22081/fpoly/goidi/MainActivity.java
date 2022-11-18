@@ -24,6 +24,7 @@ import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
 import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
 import hieuntph22081.fpoly.goidi.fragment.OrderFragment;
+import hieuntph22081.fpoly.goidi.fragment.TableFragment;
 import hieuntph22081.fpoly.goidi.fragment.UserFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new DoanhThuFragment());
                 this.setTitle(R.string.nav_doanhThu);
                 break;
-//            case R.id.quanLyTable:
-//                replaceFragment(new DoanhThuFragment());
-//                this.setTitle(R.string.nav_doanhThu);
-//                break;
+            case R.id.quanLyTable:
+                replaceFragment(new TableFragment());
+                this.setTitle(R.string.nav_table);
+                break;
         }
         drawerLayout.closeDrawer(navigationView);
         return true;

@@ -21,7 +21,7 @@
                 android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="#0E66B9"
+                android:background="#000"
                 app:titleTextColor="@color/white"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:theme="@style/Theme.GoiDi.popUpOverLay"/>
@@ -40,10 +40,11 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header_nav_layout"
         app:menu="@menu/nav_menu"
-        android:background="#0E66B9"
+        android:background="#000"
         app:itemIconTint="@color/white"
+        app:itemShapeFillColor="@color/white"
         app:itemIconPadding="40dp"
-        app:itemTextColor="@color/white"
+        app:itemTextAppearance="@style/Theme.GoiDi.NavText"
         app:itemHorizontalPadding="40dp"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

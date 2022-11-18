@@ -62,15 +62,8 @@ public class UserFragment extends Fragment {
         capNhatLv();
 
         fab.setOnClickListener(v1 -> {
-            openDialog(getActivity(), 0);//bang = thi insert
+            openDialog(0);//bang = thi insert
         });
-//        lvThanhVien.setOnItemLongClickListener((parent, view, position, id) -> {
-//
-//            item = list.get(position);
-//            openDialog(getActivity(), 1);//=1 thi update
-//
-//            return false;
-//        });
         return v;
     }
 
@@ -83,7 +76,7 @@ public class UserFragment extends Fragment {
     }
 
 
-    protected void openDialog(final Context context, final int type) {
+    protected void openDialog(final int type) {
         Dialog dialog = new Dialog(requireActivity());
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

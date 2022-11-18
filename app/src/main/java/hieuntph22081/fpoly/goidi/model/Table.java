@@ -1,20 +1,54 @@
 package hieuntph22081.fpoly.goidi.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Table {
-    private int idtable;
+
+    String id;
+    int seat;
+    int number;
+
 
     public Table() {
     }
 
-    public Table(int idtable) {
-        this.idtable = idtable;
+
+    public Table(String id, int seat, int number) {
+        this.id = id;
+        this.seat = seat;
+        this.number = number;
     }
 
-    public int getIdtable() {
-        return idtable;
+    public String getId() {
+        return id;
     }
 
-    public void setIdtable(int idtable) {
-        this.idtable = idtable;
+    public void setId(String id) {
+        this.id = id;
+
+    }
+
+    public int getSeat() {
+        return seat;
+    }
+
+    public void setSeat(int seat) {
+        this.seat = seat;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("seat", seat);
+        result.put("number", number);
+        return result;
     }
 }
