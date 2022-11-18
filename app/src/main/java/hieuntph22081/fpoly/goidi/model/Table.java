@@ -1,20 +1,20 @@
 package hieuntph22081.fpoly.goidi.model;
 
 public class Table {
-    int id;
+    private int idtable;
 
     public Table() {
     }
 
-    public Table(int id) {
-        this.id = id;
+    public Table(int idtable) {
+        this.idtable = idtable;
     }
 
-    public int getId() {
-        return id;
+    public int getIdtable() {
+        return idtable;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdtable(int idtable) {
+        this.idtable = idtable;
     }
 }
