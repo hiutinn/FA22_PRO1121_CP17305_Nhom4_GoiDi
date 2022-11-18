@@ -1,5 +1,15 @@
 package hieuntph22081.fpoly.goidi;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,21 +18,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import hieuntph22081.fpoly.goidi.fragment.FragmentFeedBack;
-import hieuntph22081.fpoly.goidi.fragment.FragmentTable;
+import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
+import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
+import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
+import hieuntph22081.fpoly.goidi.fragment.OrderFragment;
+import hieuntph22081.fpoly.goidi.fragment.UserFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private NavigationView navigationView;
@@ -48,9 +50,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-//        replaceFragment(new QuanLyOrderFragment());
+        replaceFragment(new OrderFragment());
         this.setTitle(R.string.nav_order);
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        SpannableString s = new SpannableString("Đăng xuất");
+        s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
+        navigationView.getMenu().getItem(6).getSubMenu().getItem(1).setTitle(s);
     }
 
     @Override
@@ -64,11 +70,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 break;
             case R.id.quanLyFeedback:
-                replaceFragment(new FragmentFeedBack());
+                replaceFragment(new FeedBackFragment());
+                this.setTitle(R.string.nav_feedback);
                 break;
-            case R.id.quanLyTable:
-                replaceFragment(new FragmentTable());
+            case R.id.quanLyUser:
+                replaceFragment(new UserFragment());
+                this.setTitle(R.string.nav_user);
+                break;
+            case R.id.quanLyOrder:
+                replaceFragment(new OrderFragment());
+                this.setTitle(R.string.nav_order);
+                break;
+            case R.id.quanLyDish:
+                replaceFragment(new MonAnFragment());
+                this.setTitle(R.string.nav_dish);
+                break;
+            case R.id.doanhThu:
+                replaceFragment(new DoanhThuFragment());
+                this.setTitle(R.string.nav_doanhThu);
+                break;
+//            case R.id.quanLyTable:
+//                replaceFragment(new DoanhThuFragment());
+//                this.setTitle(R.string.nav_doanhThu);
+//                break;
         }
+        drawerLayout.closeDrawer(navigationView);
         return true;
     }
 
