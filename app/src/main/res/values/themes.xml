@@ -12,8 +12,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="NoActionBar" parent="Theme.GoiDi">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
     <style name="Theme.GoiDi.AppBarPverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="Theme.GoiDi.popUpOverLay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="Theme.GoiDi.NavText">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

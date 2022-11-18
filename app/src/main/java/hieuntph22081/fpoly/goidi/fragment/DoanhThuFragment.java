@@ -82,7 +82,6 @@ public class DoanhThuFragment extends Fragment {
             myRef.child("orders").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                     double doanhThu = 0;
                     for (DataSnapshot s : snapshot.getChildren()) {
                         Order order = s.getValue(Order.class);
@@ -108,7 +107,7 @@ public class DoanhThuFragment extends Fragment {
             Date toDate = format.parse(ed_denNgay.getText().toString());
             Log.e("TAG2", ""+fromDate.toString() + "  " + toDate.toString() );
             Date orderDate = format.parse(order.getDate());
-            if (orderDate.compareTo(fromDate) >=0 && orderDate.compareTo(toDate) <= 0) {
+            if (orderDate.compareTo(fromDate) >=0 && orderDate.compareTo(toDate) <= 0 && order.getStatus() == 2) {
                 total += order.getTotal();
             }
         } catch (ParseException e) {

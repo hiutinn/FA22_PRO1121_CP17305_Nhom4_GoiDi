@@ -37,7 +37,7 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
     @NonNull
     @Override
     public ViewHodler onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_feedback,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feedback,parent,false);
         return new ViewHodler(view);
     }
 
