@@ -67,7 +67,6 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
     private Uri uri;
     private int check = 0;
     private List<Dish> listDish = new ArrayList<>();
-    private String linkUri="";
 
     public MonAnFragment() {
         // Required empty public constructor
@@ -411,7 +410,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
             }
             String tenDish = ed_ten.getText().toString();
             double giaDish = Double.parseDouble(ed_gia.getText().toString());
-            Dish dish1 = new Dish(tenDish,giaDish,linkUri);
+            Dish dish1 = new Dish(tenDish,giaDish,"");
             databaseRef.child(String.valueOf(dish.getId())).updateChildren(dish1.toMap(), new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

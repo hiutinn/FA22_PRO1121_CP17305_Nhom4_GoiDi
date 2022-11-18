@@ -64,6 +64,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             holder.tvRole.setText("Client");
             holder.tvRole.setTextColor(Color.BLUE);
         }
+        holder.tvSolan.setText("Số lần đặt bàn: "+ user.getSoLan());
 
         holder.tvPhone.setText(user.getPhone());
         holder.imgDelete.setOnClickListener(v -> {
@@ -83,7 +84,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
 
     public class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTenTV, tvRole, tvPhone;
+        TextView tvTenTV, tvRole, tvPhone, tvSolan;
         ImageView imgDelete;
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +92,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             tvRole = itemView.findViewById(R.id.tvRole);
             tvPhone = itemView.findViewById(R.id.tvPhone);
             imgDelete = itemView.findViewById(R.id.imgDelete);
+            tvSolan = itemView.findViewById(R.id.tvSoLan);
         }
     }
 
@@ -169,7 +171,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public int validate() {
         int check = 1;
         if (edtTenTv.getText().length() == 0 || edtPhone.getText().length() == 0) {
-            Toast.makeText(context, "Ban phia nhap day du thong tin!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Ban phai nhap day du thong tin!", Toast.LENGTH_SHORT).show();
             check = -1;
         }
 

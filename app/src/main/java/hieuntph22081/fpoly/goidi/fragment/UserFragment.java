@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,9 +72,11 @@ public class UserFragment extends Fragment {
     void capNhatLv() {
         list = new ArrayList<>();
         adapter = new UserAdapter(getActivity(), list);
+
         lvThanhVien.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         lvThanhVien.setAdapter(adapter);
         getListUser();
+
     }
 
 
@@ -153,6 +157,7 @@ public class UserFragment extends Fragment {
                     list.add(user);
                     adapter.notifyDataSetChanged();
                 }
+
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -184,6 +189,7 @@ public class UserFragment extends Fragment {
                         break;
                     }
                 }
+
                 adapter.notifyDataSetChanged();
             }
 

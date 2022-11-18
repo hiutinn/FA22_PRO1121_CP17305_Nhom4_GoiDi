@@ -303,7 +303,6 @@ public class OrderFragment extends Fragment {
         Button btnOk = dialog.findViewById(R.id.btnOk);
         Button btnAdd = dialog.findViewById(R.id.btnAdd);
         RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView);
-        List<OrderDish> orderDishes = new ArrayList<>();
         OrderDishAdapter dishAdapter = new OrderDishAdapter(getContext());
         dishAdapter.setData(orderDishes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
