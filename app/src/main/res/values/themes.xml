@@ -18,6 +18,7 @@
     <style name="NoActionBar" parent="Theme.GoiDi">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/drawer_list_selector</item>
     </style>
     <style name="Theme.GoiDi.AppBarPverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="Theme.GoiDi.popUpOverLay" parent="ThemeOverlay.AppCompat.Light"/>

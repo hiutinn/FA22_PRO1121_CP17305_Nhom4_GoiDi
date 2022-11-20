@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="#536DFE"
     android:backgroundTint="#536DFE"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:id="@+id/loginLayout">
 
 
     <RelativeLayout

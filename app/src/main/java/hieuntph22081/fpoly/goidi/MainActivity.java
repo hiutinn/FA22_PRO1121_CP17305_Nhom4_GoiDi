@@ -24,6 +24,7 @@ import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
 import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
 import hieuntph22081.fpoly.goidi.fragment.OrderFragment;
+import hieuntph22081.fpoly.goidi.fragment.TableFragment;
 import hieuntph22081.fpoly.goidi.fragment.Top10DishFragment;
 import hieuntph22081.fpoly.goidi.fragment.Top10UserFragment;
 import hieuntph22081.fpoly.goidi.fragment.UserFragment;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
         toggle.syncState();
+        toggle.getDrawerArrowDrawable().setColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
         replaceFragment(new OrderFragment());
         this.setTitle(R.string.nav_order);
@@ -89,15 +91,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.top10User:
                 replaceFragment(new Top10UserFragment());
-                this.setTitle("Khách hàng tiềm năng");
+                this.setTitle(R.string.nav_top10_user);
                 break;
             case R.id.top10Dish:r:
                 replaceFragment(new Top10DishFragment());
-                this.setTitle("Top 10 món ăn");
+                this.setTitle(R.string.nav_top10_dish);
                 break;
             case R.id.doanhThu:
                 replaceFragment(new DoanhThuFragment());
                 this.setTitle(R.string.nav_doanhThu);
+                break;
+            case R.id.quanLyTable:
+                replaceFragment(new TableFragment());
+                this.setTitle(R.string.nav_table);
                 break;
         }
         drawerLayout.closeDrawer(navigationView);

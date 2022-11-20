@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -46,7 +47,6 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
             FeedBack feedBack = feedBackList.get(position);
             if(feedBack == null)
                 return;
-//            holder.tv_id.setText(String.valueOf(feedBack.getId()));
             holder.tv_content.setText(String.valueOf(feedBack.getContent()));
             holder.tv_date.setText(String.valueOf(feedBack.getDate()));
             holder.tv_userId.setText(String.valueOf(feedBack.getUser().getName()));
@@ -71,7 +71,7 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference myRef = database.getReference("feedbacks");
                     myRef.child(feedBack.getId()).removeValue((error, ref)
-                            -> Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show());
+                            -> Snackbar.make(holder.itemView.getRootView().findViewById(R.id.loginLayout), "Xóa thành công!", Snackbar.LENGTH_SHORT).show());
                     dialog.cancel();
                     notifyDataSetChanged();
                 });

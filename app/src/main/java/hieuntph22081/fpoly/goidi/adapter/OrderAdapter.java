@@ -81,12 +81,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         switch (order.getStatus()) {
             case 0:
                 holder.tvOrderStatus.setText("Đang chờ");
+                holder.tvOrderStatus.setTextColor(Color.YELLOW);
                 break;
             case 1:
                 holder.tvOrderStatus.setText("Đang dùng");
+                holder.tvOrderStatus.setTextColor(Color.BLUE);
                 break;
             case 2:
                 holder.tvOrderStatus.setText("Đã xong");
+                holder.tvOrderStatus.setTextColor(Color.GREEN);
+                break;
+            case 3:
+                holder.tvOrderStatus.setText("Hủy");
+                holder.tvOrderStatus.setTextColor(Color.RED);
                 break;
         }
 

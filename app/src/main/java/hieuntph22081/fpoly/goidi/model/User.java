@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User implements Serializable {
-    private String id, name, phone;
+    private String id, name, phone, password;
     private int role;
     private int soLan;
-
-
 
     public User() {
     }
@@ -22,17 +20,11 @@ public class User implements Serializable {
         return result;
     }
 
-    public User(String id, String name, String phone, int role) {
+    public User(String id, String name, String phone, String password, int role, int soLan) {
         this.id = id;
         this.name = name;
         this.phone = phone;
-        this.role = role;
-    }
-
-    public User(String id, String name, String phone, int role, int soLan) {
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
+        this.password = password;
         this.role = role;
         this.soLan = soLan;
     }
@@ -59,6 +51,14 @@ public class User implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getRole() {

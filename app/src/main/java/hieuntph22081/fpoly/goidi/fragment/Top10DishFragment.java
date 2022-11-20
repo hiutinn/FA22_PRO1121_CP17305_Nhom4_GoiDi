@@ -41,7 +41,6 @@ public class Top10DishFragment extends Fragment {
     private RecyclerView recyclerView;
     List<Order> orders = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
-//    List<Dish> dishesInOrders = new ArrayList<>();
     List<Integer> dishOccurs = new ArrayList<>();
     List<String> dishesId = new ArrayList<>();
 
@@ -74,7 +73,7 @@ public class Top10DishFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewTop10Dish);
         adapter = new MonAnRecycleAdapter(getContext(), dish -> {
         });
-//        adapter.setData(dishes);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         getTop10Dish();
@@ -92,17 +91,20 @@ public class Top10DishFragment extends Fragment {
                 datebaseRef.child("Dish").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                dishes.clear();
+                        dishes.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             Dish dish = dataSnapshot.getValue(Dish.class);
                             dishes.add(dish);
                         }
                         for (Order order : orders) {
-                            for (OrderDish orderDish : order.getDishes()) {
-                                for (int i = 0; i < orderDish.getQuantity(); i++) {
-                                    dishesId.add(orderDish.getDish().getId());
+                            if (order.getStatus() == 2) {
+                                for (OrderDish orderDish : order.getDishes()) {
+                                    for (int i = 0; i < orderDish.getQuantity(); i++) {
+                                        dishesId.add(orderDish.getDish().getId());
+                                    }
                                 }
                             }
+
                         }
 
                         for (Dish dish : dishes) {
@@ -110,8 +112,7 @@ public class Top10DishFragment extends Fragment {
                             dishOccurs.add(occurrence);
                         }
 
-                        Log.e("TAG", "getTop10Dish: " + dishOccurs.get(1));
-                        for (int i = 0; i < dishes.size()-1; i++) {
+                        for (int i = 0; i < dishes.size() - 1; i++) {
                             for (int j = i + 1; j < dishes.size(); j++) {
                                 if (dishOccurs.get(i) < dishOccurs.get(j)) {
                                     int dupTemp = dishOccurs.get(i);
@@ -139,65 +140,4 @@ public class Top10DishFragment extends Fragment {
             }
         });
     }
-//    public void getTop10Dish() {
-//        listIdDish.clear();
-//        datebaseRef = FirebaseDatabase.getInstance().getReference().child("orders");
-//        datebaseRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    if(dataSnapshot != null){
-//                        Order order = dataSnapshot.getValue(Order.class);
-//                        datebaseRef = FirebaseDatabase.getInstance().getReference().child("orders/"+order.getId()+"/dishes/"+0);
-//                        datebaseRef.addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                if(snapshot != null){
-//                                    datebaseRef.child("quantity").addValueEventListener(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                            if(snapshot.getValue() != null){
-//                                                String soLuong  = snapshot.getValue().toString();;
-//                                                Soluong+= Integer.parseInt(soLuong);
-//                                            }
-//                                        }
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                                        }
-//                                    });
-//
-//                                    datebaseRef.child("dish").addValueEventListener(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                            if(snapshot != null){
-//                                                Dish dish = snapshot.getValue(Dish.class);
-////                                        datebaseRef = FirebaseDatabase.getInstance().getReference().child("Dish/"+dish.getId()+"soLuong");
-////                                        datebaseRef.setValue(soLan);
-//                                                Log.e("id",dish.getId());
-//                                                Log.e("soLuong",Soluong+"");
-//                                            }
-//
-//                                        }
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError error) {
-//                                        }
-//                                    });
-//                                }
-//
-//                            }
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//                            }
-//                        });
-//
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
-//
-//    }
 }

@@ -1,5 +1,6 @@
 package hieuntph22081.fpoly.goidi;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
@@ -12,8 +13,17 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import hieuntph22081.fpoly.goidi.model.User;
 
 public class LoginActivity extends AppCompatActivity {
     EditText txtMaTT,txtPassword;
@@ -58,31 +68,40 @@ public class LoginActivity extends AppCompatActivity {
         boolean status = chkRemember.isChecked();
 
         if (ma.length() == 0 || pw.length() == 0) {
-            Toast.makeText(LoginActivity.this, "Không để trống các ô", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.loginLayout), "Không để trống thông tin!", Snackbar.LENGTH_SHORT).show();
         } else {
-            boolean check = false;
-//            for (ThuThu u : thuThuDAO.getAllThuThu()) {
-//                if (ma.equals(u.getMaTT()) && pw.equals(u.getMatKhau())) {
-//                    check = true;
-//
-//                    break;
-//                }
-//            }
-            if (ma.equals("admin") && pw.equals("admin")) {
-                    check = true;
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+            myRef.child("users").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean check = false;
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        User user = snapshot1.getValue(User.class);
+                            if (ma.equals(user.getPhone()) && pw.equals(user.getPassword()) && user.getRole() == 1) {
+                                check = true;
+                                break;
+                            }
+                    }
+
+                    if (check) {
+                        savePreference(ma,pw,!status,status);
+                        Snackbar.make(findViewById(R.id.loginLayout), "Đăng nhập thành công!", Snackbar.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("maTT", ma);
+                        intent.putExtra("bundle",bundle);
+                        startActivity(intent);
+                        finish();
+                    } else
+                        Snackbar.make(findViewById(R.id.loginLayout), "Thông tin đăng nhập không chính xác!", Snackbar.LENGTH_SHORT).show();
                 }
-            if (check) {
-                savePreference(ma,pw,!status,status);
-                Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("maTT", ma);
-                intent.putExtra("bundle",bundle);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(LoginActivity.this, "Thông tin sai", Toast.LENGTH_SHORT).show();
-            }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
         }
     }
 

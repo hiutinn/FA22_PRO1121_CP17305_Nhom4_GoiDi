@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -61,7 +62,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
         ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_XY;
         holder.img_monAn.setScaleType(scaleType);
         holder.tv_tenMonAn.setText(dish.getTen());
-        holder.tv_gia.setText(String.valueOf(dish.getGia()));
+        holder.tv_gia.setText(formatCurrency(dish.getGia()));
         AtomicInteger soLuong = new AtomicInteger();
         soLuong.set(dish.getSoLuong());
 
@@ -73,15 +74,12 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
         holder.itemView.setOnClickListener(v -> {
             iClickListener.OnClickUpdateItem(dish);
         });
+    }
 
-//        holder.btn_tang.setOnClickListener(v -> {
-//            soLuong.getAndIncrement();
-//            holder.tv_soLuong.setText(String.valueOf(soLuong.get()));
-//        });
-//        holder.btn_giam.setOnClickListener(v -> {
-//            soLuong.getAndDecrement();
-//            holder.tv_soLuong.setText(String.valueOf(soLuong.get()));
-//        });
+    public String formatCurrency(double money) {
+        String pattern="###,###.### VNĐ";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        return myFormatter.format(money);
     }
 
     @Override
@@ -94,17 +92,13 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
 
     public class userViewHolder extends RecyclerView.ViewHolder {
         ImageView img_monAn,img_xoaMonAn;
-        TextView tv_tenMonAn,tv_gia,tv_soLuong;
-        Button btn_tang,btn_giam;
+        TextView tv_tenMonAn,tv_gia;
         public userViewHolder(@NonNull View itemView) {
             super(itemView);
             img_monAn = itemView.findViewById(R.id.img_monAn);
             tv_tenMonAn = itemView.findViewById(R.id.tv_ten_mon);
             tv_gia = itemView.findViewById(R.id.tv_gia);
             img_xoaMonAn = itemView.findViewById(R.id.img_xoaMonAn);
-//            tv_soLuong = itemView.findViewById(R.id.tv_soLuong);
-//            btn_tang = itemView.findViewById(R.id.btn_tang);
-//            btn_giam = itemView.findViewById(R.id.btn_giam);
         }
     }
     public void diaLogDelete(Dish dish){
