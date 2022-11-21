@@ -41,7 +41,7 @@ public class Top10DishFragment extends Fragment {
     private RecyclerView recyclerView;
     List<Order> orders = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
-//    List<Dish> dishesInOrders = new ArrayList<>();
+    //    List<Dish> dishesInOrders = new ArrayList<>();
     List<Integer> dishOccurs = new ArrayList<>();
     List<String> dishesId = new ArrayList<>();
 
@@ -87,12 +87,13 @@ public class Top10DishFragment extends Fragment {
                 orders.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Order order = dataSnapshot.getValue(Order.class);
-                    orders.add(order);
+                        orders.add(order);
+
                 }
                 datebaseRef.child("Dish").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                dishes.clear();
+                        dishes.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             Dish dish = dataSnapshot.getValue(Dish.class);
                             dishes.add(dish);
@@ -109,9 +110,9 @@ public class Top10DishFragment extends Fragment {
                             int occurrence = Collections.frequency(dishesId, dish.getId());
                             dishOccurs.add(occurrence);
                         }
-
+                        //10-20
                         Log.e("TAG", "getTop10Dish: " + dishOccurs.get(1));
-                        for (int i = 0; i < dishes.size()-1; i++) {
+                        for (int i = 0; i < dishes.size() - 1; i++) {
                             for (int j = i + 1; j < dishes.size(); j++) {
                                 if (dishOccurs.get(i) < dishOccurs.get(j)) {
                                     int dupTemp = dishOccurs.get(i);

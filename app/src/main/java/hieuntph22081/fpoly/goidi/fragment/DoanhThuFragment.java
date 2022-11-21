@@ -64,12 +64,10 @@ public class DoanhThuFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         ed_tuNgay = view.findViewById(R.id.ed_DT_tuNgay);
         ed_denNgay = view.findViewById(R.id.ed_DT_denNgay);
         tv_doanhThu = view.findViewById(R.id.tv_doanhThu);
         Calendar calendar = Calendar.getInstance();
-        timePickerDialog(calendar,ed_tuNgay);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
@@ -131,19 +129,6 @@ public class DoanhThuFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    private void timePickerDialog(Calendar mcurrentTime, EditText editText){
-        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mcurrentTime.get(Calendar.MINUTE);
-        TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                editText.setText(selectedHour + ":" + selectedMinute);
-            }
-        }, hour, minute,true);
-        mTimePicker.setTitle("Select Time");
-        mTimePicker.show();
-    }
 
 
     public String formatCurrency(double money) {

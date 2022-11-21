@@ -94,6 +94,7 @@ public class Top10UserFragment extends Fragment {
 
 
     public void getTop10User() {
+
         listIdUser.clear();
         datebaseRef = FirebaseDatabase.getInstance().getReference().child("orders");
         datebaseRef.addValueEventListener(new ValueEventListener() {

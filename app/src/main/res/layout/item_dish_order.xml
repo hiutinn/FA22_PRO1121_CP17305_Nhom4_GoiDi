@@ -26,8 +26,16 @@
         android:id="@+id/tvQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_toLeftOf="@+id/img_delete_dish"
         android:text="Lẩu gà"
         android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:layout_marginRight="20dp"/>
+
+    <ImageView
+        android:id="@+id/img_delete_dish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_baseline_close_24"/>
 </RelativeLayout>
