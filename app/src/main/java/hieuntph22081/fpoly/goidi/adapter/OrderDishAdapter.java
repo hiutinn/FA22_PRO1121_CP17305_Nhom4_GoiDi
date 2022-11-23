@@ -24,8 +24,6 @@ import hieuntph22081.fpoly.goidi.model.OrderDish;
 public class OrderDishAdapter extends RecyclerView.Adapter<OrderDishAdapter.OrderDishViewHolder> {
     Context context;
     List<OrderDish> list;
-    double temp = 0;
-    double gia = 0;
     public OrderDishAdapter(Context context) {
         this.context = context;
     }

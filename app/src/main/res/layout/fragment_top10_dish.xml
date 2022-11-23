@@ -4,12 +4,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.Top10DishFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewTop10Dish"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_TopDish_tuNgay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Từ ngày"
+                android:drawableEnd="@drawable/calendar"
+                android:background="#FAF6F6"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_TopDish_denNgay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Đến ngày"
+                android:background="#FAF6F6"
+                android:drawableEnd="@drawable/calendar"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:layout_marginTop="50dp"
+            android:id="@+id/btn_topDish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/doanhthu"
+            android:layout_gravity="center"
+            android:text="Xác nhận"
+            android:textColor="#1E1D1D"
+            android:backgroundTint="#358e9d"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTop10Dish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment" />
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

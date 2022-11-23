@@ -71,8 +71,8 @@ public class UserFragment extends Fragment {
 
     void capNhatLv() {
         list = new ArrayList<>();
-        adapter = new UserAdapter(getActivity(), list);
-
+        adapter = new UserAdapter(getActivity());
+        adapter.setData(list);
         lvThanhVien.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         lvThanhVien.setAdapter(adapter);
         getListUser();
