@@ -251,6 +251,7 @@ public class OrderFragment extends Fragment {
             orderDishes = openDishDialog();
 
         });
+        orderDishes.clear();
         dishAdapter.setData(orderDishes);
         recyclerView_orderDish = dialog.findViewById(R.id.recycleView_orderDish);
         recyclerView_orderDish.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));

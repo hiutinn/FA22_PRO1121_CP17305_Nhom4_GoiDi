@@ -42,9 +42,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     RadioButton rdoRoleAdmin, rdoRoleClient;
     RadioGroup rdoRole;
 
-    public UserAdapter(Context context, List<User> list) {
+    public UserAdapter(Context context) {
         this.context=context;
+    }
+    public void setData(List<User> list) {
         this.list=list;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -64,7 +67,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             holder.tvRole.setText("Client");
             holder.tvRole.setTextColor(Color.BLUE);
         }
-        holder.tvSolan.setText("Số lần đặt bàn: "+ user.getSoLan());
+        //holder.tvSolan.setText("Số lần đặt bàn: "+ user.getSoLan());
 
         holder.tvPhone.setText(user.getPhone());
         holder.imgDelete.setOnClickListener(v -> {
@@ -79,12 +82,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if(list != null){
+            return list.size();
+        }
+        return 0;
     }
 
 
     public class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTenTV, tvRole, tvPhone, tvSolan;
+        TextView tvTenTV, tvRole, tvPhone;
         ImageView imgDelete;
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,7 +98,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             tvRole = itemView.findViewById(R.id.tvRole);
             tvPhone = itemView.findViewById(R.id.tvPhone);
             imgDelete = itemView.findViewById(R.id.imgDelete);
-            tvSolan = itemView.findViewById(R.id.tvSoLan);
         }
     }
 

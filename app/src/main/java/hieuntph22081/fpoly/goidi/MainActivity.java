@@ -24,6 +24,7 @@ import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
 import hieuntph22081.fpoly.goidi.fragment.MonAnFragment;
 import hieuntph22081.fpoly.goidi.fragment.OrderFragment;
+import hieuntph22081.fpoly.goidi.fragment.TableFragment;
 import hieuntph22081.fpoly.goidi.fragment.Top10DishFragment;
 import hieuntph22081.fpoly.goidi.fragment.Top10UserFragment;
 import hieuntph22081.fpoly.goidi.fragment.UserFragment;
@@ -97,7 +98,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.doanhThu:
                 replaceFragment(new DoanhThuFragment());
-                this.setTitle(R.string.nav_doanhThu);
+                this.setTitle("Quản lý doanh thu");
+                break;
+            case R.id.quanLyTable:
+                replaceFragment(new TableFragment());
+                this.setTitle("Quản lý bàn");
                 break;
         }
         drawerLayout.closeDrawer(navigationView);

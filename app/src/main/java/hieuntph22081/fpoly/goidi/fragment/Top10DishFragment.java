@@ -1,5 +1,6 @@
 package hieuntph22081.fpoly.goidi.fragment;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,16 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import hieuntph22081.fpoly.goidi.R;
@@ -35,15 +42,15 @@ import hieuntph22081.fpoly.goidi.model.User;
 
 public class Top10DishFragment extends Fragment {
     private DatabaseReference datebaseRef;
-    private List<String> listIdDish = new ArrayList<>();
-    private List<Dish> listDish = new ArrayList<>();
     private MonAnRecycleAdapter adapter;
     private RecyclerView recyclerView;
+    List<Order> listOrders = new ArrayList<>();
     List<Order> orders = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
-    //    List<Dish> dishesInOrders = new ArrayList<>();
     List<Integer> dishOccurs = new ArrayList<>();
     List<String> dishesId = new ArrayList<>();
+    private TextInputEditText ed_tuNgay, ed_denNgay;
+    private int day, month, year;
 
     public Top10DishFragment() {
         // Required empty public constructor
@@ -74,10 +81,28 @@ public class Top10DishFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewTop10Dish);
         adapter = new MonAnRecycleAdapter(getContext(), dish -> {
         });
-//        adapter.setData(dishes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
-        getTop10Dish();
+        //adapter.setData(dishes);
+
+
+
+
+        ed_tuNgay = view.findViewById(R.id.ed_TopDish_tuNgay);
+        ed_denNgay = view.findViewById(R.id.ed_TopDish_denNgay);
+        Calendar calendar = Calendar.getInstance();
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
+        ed_tuNgay.setOnClickListener(v -> {
+            datePickerDialog(calendar, ed_tuNgay);
+        });
+        ed_denNgay.setOnClickListener(v -> {
+            datePickerDialog(calendar, ed_denNgay);
+        });
+        view.findViewById(R.id.btn_topDish).setOnClickListener(v -> {
+            getTop10Dish();
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+            recyclerView.setAdapter(adapter);
+        });
     }
 
     public void getTop10Dish() {
@@ -87,8 +112,7 @@ public class Top10DishFragment extends Fragment {
                 orders.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Order order = dataSnapshot.getValue(Order.class);
-                        orders.add(order);
-
+                    orders = getListDistByDate(order);
                 }
                 datebaseRef.child("Dish").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -96,8 +120,24 @@ public class Top10DishFragment extends Fragment {
                         dishes.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             Dish dish = dataSnapshot.getValue(Dish.class);
-                            dishes.add(dish);
+                            for (Order order : orders) {
+                                for (OrderDish orderDish : order.getDishes()) {
+                                    if(orderDish.getDish().getId().equals(dish.getId())){
+                                        dishes.add(dish);
+                                    }
+                                }
+                            }
                         }
+                        for(int a =0; a<2;a++){
+                            for(int i =0; i<dishes.size()-1;i++){
+                                for(int x =i+1;x<dishes.size();x++){
+                                    if(dishes.get(i).getId().equals(dishes.get(x).getId())){
+                                        dishes.remove(x);
+                                    }
+                                }
+                            }
+                        }
+
                         for (Order order : orders) {
                             for (OrderDish orderDish : order.getDishes()) {
                                 for (int i = 0; i < orderDish.getQuantity(); i++) {
@@ -106,12 +146,14 @@ public class Top10DishFragment extends Fragment {
                             }
                         }
 
+                        dishOccurs.clear();
                         for (Dish dish : dishes) {
                             int occurrence = Collections.frequency(dishesId, dish.getId());
                             dishOccurs.add(occurrence);
+                            Log.e("size",dish.getId()+"");
+                            Log.e("size2",occurrence+"");
                         }
-                        //10-20
-                        Log.e("TAG", "getTop10Dish: " + dishOccurs.get(1));
+ //                       10-20
                         for (int i = 0; i < dishes.size() - 1; i++) {
                             for (int j = i + 1; j < dishes.size(); j++) {
                                 if (dishOccurs.get(i) < dishOccurs.get(j)) {
@@ -140,65 +182,32 @@ public class Top10DishFragment extends Fragment {
             }
         });
     }
-//    public void getTop10Dish() {
-//        listIdDish.clear();
-//        datebaseRef = FirebaseDatabase.getInstance().getReference().child("orders");
-//        datebaseRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    if(dataSnapshot != null){
-//                        Order order = dataSnapshot.getValue(Order.class);
-//                        datebaseRef = FirebaseDatabase.getInstance().getReference().child("orders/"+order.getId()+"/dishes/"+0);
-//                        datebaseRef.addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                if(snapshot != null){
-//                                    datebaseRef.child("quantity").addValueEventListener(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                            if(snapshot.getValue() != null){
-//                                                String soLuong  = snapshot.getValue().toString();;
-//                                                Soluong+= Integer.parseInt(soLuong);
-//                                            }
-//                                        }
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                                        }
-//                                    });
-//
-//                                    datebaseRef.child("dish").addValueEventListener(new ValueEventListener() {
-//                                        @Override
-//                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                            if(snapshot != null){
-//                                                Dish dish = snapshot.getValue(Dish.class);
-////                                        datebaseRef = FirebaseDatabase.getInstance().getReference().child("Dish/"+dish.getId()+"soLuong");
-////                                        datebaseRef.setValue(soLan);
-//                                                Log.e("id",dish.getId());
-//                                                Log.e("soLuong",Soluong+"");
-//                                            }
-//
-//                                        }
-//                                        @Override
-//                                        public void onCancelled(@NonNull DatabaseError error) {
-//                                        }
-//                                    });
-//                                }
-//
-//                            }
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//                            }
-//                        });
-//
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
-//
-//    }
+
+    private List<Order> getListDistByDate(Order order) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        //13/11 so sanh 17/11 =-1
+        //17/11 so sanh 13/11 = 1
+        try {
+            Date fromDate = format.parse(ed_tuNgay.getText().toString());
+            Date toDate = format.parse(ed_denNgay.getText().toString());
+            Date orderDate = format.parse(order.getDate());
+            if (orderDate.compareTo(fromDate) >= 0 && orderDate.compareTo(toDate) <= 0 && order.getStatus() == 2) {
+                listOrders.add(order);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("error", e.getMessage());
+        }
+        return listOrders;
+    }
+
+    private void datePickerDialog(Calendar calendar, EditText editText) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            editText.setText(simpleDateFormat.format(calendar.getTime()));
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+
 }

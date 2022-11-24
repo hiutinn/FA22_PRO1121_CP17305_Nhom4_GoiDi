@@ -1,9 +1,11 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -90,6 +93,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 break;
             case 2:
                 holder.tvOrderStatus.setText("Đã xong");
+                break;
+            case 3:
+                diaLogDelete(order);
                 break;
         }
         holder.tvOrderUser.setText("Khách hàng: " + order.getUser().getName());
@@ -203,12 +209,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         myRef.child("orders/"+order.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Order order1 = snapshot.getValue(Order.class);
-                orderDishes = order1.getDishes();
-                dishAdapter.setData(orderDishes);
-                recyclerView_orderDish = dialog.findViewById(R.id.recycleView_orderDish);
-                recyclerView_orderDish.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-                recyclerView_orderDish.setAdapter(dishAdapter);
+                if(snapshot.getValue()!= null){
+                    Order order1 = snapshot.getValue(Order.class);
+                    orderDishes = order1.getDishes();
+                    dishAdapter.setData(orderDishes);
+                    recyclerView_orderDish = dialog.findViewById(R.id.recycleView_orderDish);
+                    recyclerView_orderDish.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                    recyclerView_orderDish.setAdapter(dishAdapter);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -369,5 +377,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             contentLayout = itemView.findViewById(R.id.contentLayout);
             recyclerViewDishes = itemView.findViewById(R.id.recyclerViewDishes);
         }
+    }
+    public void diaLogDelete(Order order){
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("orders/"+order.getId());
+        databaseRef.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
