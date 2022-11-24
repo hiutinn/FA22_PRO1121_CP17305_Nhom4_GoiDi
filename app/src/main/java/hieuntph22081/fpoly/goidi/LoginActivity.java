@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (check) {
                         savePreference(ma,pw,!status,status);
-                        Snackbar.make(findViewById(R.id.loginLayout), "Đăng nhập thành công!", Snackbar.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("maTT", ma);

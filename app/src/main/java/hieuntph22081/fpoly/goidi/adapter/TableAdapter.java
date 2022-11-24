@@ -1,6 +1,7 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -66,7 +67,21 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
             return true;
         });
         holder.imgDelete.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Delete");
+            builder.setMessage("Bạn có muốn xóa không ?");
+            builder.setCancelable(true);
 
+            builder.setPositiveButton("yes", (dialog, which) -> {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("tables");
+                myRef.child(table.getId()).removeValue((error, ref)
+                        -> Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show());
+                dialog.cancel();
+                notifyDataSetChanged();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            builder.show();
         });
     }
     void diaLogTable(Table table){

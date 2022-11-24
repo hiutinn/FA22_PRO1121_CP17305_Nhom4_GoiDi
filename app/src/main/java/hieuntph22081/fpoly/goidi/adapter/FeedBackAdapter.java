@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -71,7 +70,7 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference myRef = database.getReference("feedbacks");
                     myRef.child(feedBack.getId()).removeValue((error, ref)
-                            -> Snackbar.make(holder.itemView.getRootView().findViewById(R.id.loginLayout), "Xóa thành công!", Snackbar.LENGTH_SHORT).show());
+                            -> Toast.makeText(context, "Xóa thành công!", Toast.LENGTH_SHORT).show());
                     dialog.cancel();
                     notifyDataSetChanged();
                 });

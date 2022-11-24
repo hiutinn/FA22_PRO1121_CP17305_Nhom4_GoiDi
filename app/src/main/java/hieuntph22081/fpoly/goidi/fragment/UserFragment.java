@@ -47,9 +47,9 @@ public class UserFragment extends Fragment {
     RecyclerView lvThanhVien;
     List<User> list;
     UserAdapter adapter;
-    User item;
+
     FloatingActionButton fab;
-    EditText edtTenTv, edtPhone;
+    EditText edtTenTv, edtPhone, edtPassword;
     Button btnSave, btnCancel;
     RadioButton rdoRoleAdmin, rdoRoleClient;
     RadioGroup rdoRole;
@@ -95,33 +95,31 @@ public class UserFragment extends Fragment {
 
         edtTenTv = dialog.findViewById(R.id.edtTenTV);
         edtPhone = dialog.findViewById(R.id.edtPhone);
+        edtPassword = dialog.findViewById(R.id.edtPassword);
         rdoRoleAdmin = dialog.findViewById(R.id.rdoRoleAdmin);
         rdoRoleClient = dialog.findViewById(R.id.rdoRoleClient);
         rdoRole = dialog.findViewById(R.id.rdoRole);
         btnCancel = dialog.findViewById(R.id.btnCancelTV);
         btnSave = dialog.findViewById(R.id.btnSaveTV);
 
-        if (type != 0) {
-            //cap nhat
-            edtTenTv.setText(String.valueOf(item.getName()));
-            edtPhone.setText(String.valueOf(item.getPhone()));
-        }
+
+
         btnCancel.setOnClickListener(v -> dialog.dismiss());
         btnSave.setOnClickListener(v -> {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("users");
-            item = new User();
-            item.setId("user" + (Calendar.getInstance().getTimeInMillis()));
-            item.setName(edtTenTv.getText().toString());
-            item.setPhone(edtPhone.getText().toString());
-            if (rdoRoleAdmin.isChecked()) {
-                item.setRole(0);
-            } else if (rdoRoleClient.isChecked()) {
-                item.setRole(1);
-            }
-
             if (validate() > 0) {
                 //==- thi them nguoi dung
+                User item = new User();
+                item.setId("user" + (Calendar.getInstance().getTimeInMillis()));
+                item.setName(edtTenTv.getText().toString());
+                item.setPhone(edtPhone.getText().toString());
+                item.setPassword(edtPassword.getText().toString());
+                if (rdoRoleAdmin.isChecked()) {
+                    item.setRole(0);
+                } else if (rdoRoleClient.isChecked()) {
+                    item.setRole(1);
+                }
                 String pathObject = String.valueOf(item.getId());
                 myRef.child(pathObject).setValue(item, (error, ref) -> Toast.makeText(getContext(), "Thêm thành công", Toast.LENGTH_SHORT).show());
                 dialog.dismiss();
@@ -132,8 +130,8 @@ public class UserFragment extends Fragment {
 
     public int validate() {
         int check = 1;
-        if (edtTenTv.getText().length() == 0 || edtPhone.getText().length() == 0) {
-            Toast.makeText(getContext(), "Ban phia nhap day du thong tin!", Toast.LENGTH_SHORT).show();
+        if (edtTenTv.getText().length() == 0 || edtPhone.getText().length() == 0 || edtPassword.getText().length() == 0) {
+            Toast.makeText(getContext(), "Không để trống thông tin!", Toast.LENGTH_SHORT).show();
             check = -1;
         }
 
@@ -189,7 +187,6 @@ public class UserFragment extends Fragment {
                         break;
                     }
                 }
-
                 adapter.notifyDataSetChanged();
             }
 

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SpannableString s = new SpannableString("Đăng xuất");
         s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
-        navigationView.getMenu().getItem(6).getSubMenu().getItem(1).setTitle(s);
+        navigationView.getMenu().getItem(5).getSubMenu().getItem(1).setTitle(s);
     }
 
     @Override
