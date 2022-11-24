@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -47,6 +48,7 @@ import java.util.Locale;
 import hieuntph22081.fpoly.goidi.R;
 import hieuntph22081.fpoly.goidi.adapter.OrderAdapter;
 import hieuntph22081.fpoly.goidi.adapter.OrderDishAdapter;
+import hieuntph22081.fpoly.goidi.adapter.SpinnerAdapter;
 import hieuntph22081.fpoly.goidi.model.Dish;
 import hieuntph22081.fpoly.goidi.model.Order;
 import hieuntph22081.fpoly.goidi.model.Order;
@@ -61,6 +63,7 @@ import hieuntph22081.fpoly.goidi.model.User;
  */
 public class OrderFragment extends Fragment {
     RecyclerView recyclerViewOrder;
+    RecyclerView recyclerView_orderDish;
     OrderAdapter adapter;
     List<Order> list = new ArrayList<>();
     FloatingActionButton fab;
@@ -70,7 +73,10 @@ public class OrderFragment extends Fragment {
     List<Table> tables = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
     List<OrderDish> orderDishes = new ArrayList<>();
+    OrderDishAdapter dishAdapter = new OrderDishAdapter(getContext());
     int mHour, mMinute;
+    SpinnerAdapter spinnerAdapter;
+
     public OrderFragment() {
         // Required empty public constructor
     }
@@ -102,7 +108,6 @@ public class OrderFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
         initData();
-
         fab.setOnClickListener(v -> openOrderDialog());
     }
 
@@ -120,7 +125,7 @@ public class OrderFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Order order = snapshot.getValue(Order.class);
                 if (order != null) {
-                    list.add(order);
+                    list.add(0,order);
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -178,7 +183,6 @@ public class OrderFragment extends Fragment {
 //        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
 //        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.58);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
-
         TextView dialogUserTitle = dialog.findViewById(R.id.dialogUserTitle);
         dialogUserTitle.setText("Thêm Order");
 
@@ -187,15 +191,18 @@ public class OrderFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for (DataSnapshot s : snapshot.getChildren()) {
-                    User user = s.getValue(User.class);
-                    users.add(user);
+                if(snapshot.getValue() != null){
+                    for (DataSnapshot s : snapshot.getChildren()) {
+                        User user = s.getValue(User.class);
+                        users.add(user);
+                    }
+                    List<String> userNames = new ArrayList<>();
+                    for (User u : users) {
+                        userNames.add(u.getName());
+                    }
+                    spnOrderUser.setAdapter(new ArrayAdapter<>(getActivity(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
+
                 }
-                List<String> userNames = new ArrayList<>();
-                for (User u : users) {
-                    userNames.add(u.getName());
-                }
-                spnOrderUser.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
             }
 
             @Override
@@ -240,10 +247,16 @@ public class OrderFragment extends Fragment {
         statuses.add("Hủy");
         spnOrderStatus.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, statuses));
         Button btnOrderDish = dialog.findViewById(R.id.btnOrderDish);
-
         btnOrderDish.setOnClickListener(v -> {
             orderDishes = openDishDialog();
+
         });
+        orderDishes.clear();
+        dishAdapter.setData(orderDishes);
+        recyclerView_orderDish = dialog.findViewById(R.id.recycleView_orderDish);
+        recyclerView_orderDish.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerView_orderDish.setAdapter(dishAdapter);
+
 
         Button btnCancel = dialog.findViewById(R.id.btnCancel);
         Button btnSave = dialog.findViewById(R.id.btnSave);
@@ -282,16 +295,21 @@ public class OrderFragment extends Fragment {
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
 
         Spinner spnDish = dialog.findViewById(R.id.spnDish);
+
+
+
         myRef.child("Dish").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> dishNames = new ArrayList<>();
+                dishes.clear();
                 for (DataSnapshot s : snapshot.getChildren()) {
                     Dish dish = s.getValue(Dish.class);
-                    dishNames.add(dish.getTen());
+                   // dishNames.add(dish.getTen());
                     dishes.add(dish);
                 }
-                spnDish.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, dishNames));
+                spinnerAdapter = new SpinnerAdapter(getActivity(), dishes);
+                spnDish.setAdapter(spinnerAdapter);
+                //spnDish.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, dishNames));
             }
 
             @Override
@@ -303,12 +321,10 @@ public class OrderFragment extends Fragment {
         Button btnOk = dialog.findViewById(R.id.btnOk);
         Button btnAdd = dialog.findViewById(R.id.btnAdd);
         RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView);
-        OrderDishAdapter dishAdapter = new OrderDishAdapter(getContext());
-        dishAdapter.setData(orderDishes);
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(dishAdapter);
-
-
         btnAdd.setOnClickListener(v -> {
             OrderDish orderDish = new OrderDish();
             try {
@@ -322,6 +338,7 @@ public class OrderFragment extends Fragment {
                 return;
             }
             orderDish.setDish(dishes.get(spnDish.getSelectedItemPosition()));
+
             for (OrderDish orderDish1 : orderDishes) {
                 if (orderDish1.getDish().getId().equals(orderDish.getDish().getId())) {
                     orderDish1.setQuantity(orderDish1.getQuantity() + orderDish.getQuantity());
@@ -329,10 +346,15 @@ public class OrderFragment extends Fragment {
                     return;
                 }
             }
+            double tong = 0;
+            for (OrderDish orderDish1 : orderDishes) {
+                tong += orderDish1.getDish().getGia() * orderDish1.getQuantity();
+            }
+            Log.e("TAG", "Tong tien: " + tong );
             orderDishes.add(orderDish);
             dishAdapter.setData(orderDishes);
         });
-        Toast.makeText(getContext(), ""+orderDishes.size(), Toast.LENGTH_SHORT).show();
+
         btnOk.setOnClickListener(v -> dialog.dismiss());
         dialog.setCancelable(true);
         dialog.show();

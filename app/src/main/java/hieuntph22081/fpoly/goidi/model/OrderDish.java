@@ -12,6 +12,7 @@ public class OrderDish {
         this.quantity = quantity;
     }
 
+
     public Dish getDish() {
         return dish;
     }
@@ -27,4 +28,5 @@ public class OrderDish {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
 }

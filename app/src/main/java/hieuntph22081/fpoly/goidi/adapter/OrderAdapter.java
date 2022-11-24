@@ -1,9 +1,11 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,11 +56,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     FirebaseDatabase database;
     DatabaseReference myRef;
 //    List<OrderDish> list = new ArrayList<>();
-    OrderDishAdapter adapter;
+    OrderDishAdapter2 adapter;
     List<User> users = new ArrayList<>();
     List<Table> tables = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
     List<OrderDish> orderDishes = new ArrayList<>();
+    OrderDishAdapter dishAdapter = new OrderDishAdapter(context);
+    RecyclerView recyclerView_orderDish;
+    private SpinnerAdapter spinnerAdapter;
     int mHour, mMinute;
     public OrderAdapter(Context context, List<Order> orders) {
         this.context = context;
@@ -95,13 +101,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.tvOrderStatus.setText("Hủy");
                 holder.tvOrderStatus.setTextColor(Color.RED);
                 break;
+            case 3:
+                diaLogDelete(order);
+                break;
         }
-
         holder.tvOrderUser.setText("Khách hàng: " + order.getUser().getName());
         holder.tvOrderTotal.setText("Tổng tiền: " + formatCurrency(order.getTotal()) );
-
         holder.recyclerViewDishes.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-        adapter = new OrderDishAdapter(context);
+        adapter = new OrderDishAdapter2(context);
         adapter.setData(order.getDishes());
         holder.recyclerViewDishes.setAdapter(adapter);
         holder.itemView.setOnClickListener(v -> {
@@ -113,7 +120,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.imgDropDown.setImageResource(R.drawable.ic_drop_down);
             }
         });
-        holder.imgEdit.setOnClickListener(v -> openOrderDialog(order));
+        if(order.getStatus()==2){
+            holder.imgEdit.setEnabled(false);
+            holder.imgEdit.setVisibility(View.INVISIBLE);
+        }else{
+            holder.imgEdit.setVisibility(View.VISIBLE);
+            holder.imgEdit.setEnabled(true);
+            holder.imgEdit.setOnClickListener(v ->{
+                openOrderDialog(order);
+            });
+        }
+
     }
 
     public void openOrderDialog(Order order) {
@@ -196,12 +213,28 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         spnOrderStatus.setSelection(order.getStatus());
 
         Button btnOrderDish = dialog.findViewById(R.id.btnOrderDish);
+        myRef.child("orders/"+order.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue()!= null){
+                    Order order1 = snapshot.getValue(Order.class);
+                    orderDishes = order1.getDishes();
+                    dishAdapter.setData(orderDishes);
+                    recyclerView_orderDish = dialog.findViewById(R.id.recycleView_orderDish);
+                    recyclerView_orderDish.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                    recyclerView_orderDish.setAdapter(dishAdapter);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        orderDishes = order.getDishes();
+            }
+        });
+//        orderDishes = order.getDishes();
+
         btnOrderDish.setOnClickListener(v -> {
             orderDishes = openDishDialog();
         });
-
         Button btnCancel = dialog.findViewById(R.id.btnCancel);
         Button btnSave = dialog.findViewById(R.id.btnSave);
 
@@ -240,13 +273,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         myRef.child("Dish").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                dishes.clear();
                 List<String> dishNames = new ArrayList<>();
                 for (DataSnapshot s : snapshot.getChildren()) {
                     Dish dish = s.getValue(Dish.class);
-                    dishNames.add(dish.getTen());
+//                  dishNames.add(dish.getTen());
                     dishes.add(dish);
                 }
-                spnDish.setAdapter(new ArrayAdapter<>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, dishNames));
+                spinnerAdapter = new SpinnerAdapter(context, dishes);
+                spnDish.setAdapter(spinnerAdapter);
+//                spnDish.setAdapter(new ArrayAdapter<>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, dishNames));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -257,10 +293,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         Button btnOk = dialog.findViewById(R.id.btnOk);
         Button btnAdd = dialog.findViewById(R.id.btnAdd);
         RecyclerView recyclerView = dialog.findViewById(R.id.recyclerView);
-        OrderDishAdapter dishAdapter = new OrderDishAdapter(context);
+
+
         dishAdapter.setData(orderDishes);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(dishAdapter);
+
 
         btnAdd.setOnClickListener(v -> {
             OrderDish orderDish = new OrderDish();
@@ -346,5 +384,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             contentLayout = itemView.findViewById(R.id.contentLayout);
             recyclerViewDishes = itemView.findViewById(R.id.recyclerViewDishes);
         }
+    }
+    public void diaLogDelete(Order order){
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("orders/"+order.getId());
+        databaseRef.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

@@ -109,6 +109,10 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleView_orderDish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/btnOrderDish"
                 android:layout_width="wrap_content"
@@ -126,7 +130,7 @@
                 android:id="@+id/spnOrderStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp" />
+                android:padding="12dp"/>
         </LinearLayout>
     </ScrollView>
     <LinearLayout

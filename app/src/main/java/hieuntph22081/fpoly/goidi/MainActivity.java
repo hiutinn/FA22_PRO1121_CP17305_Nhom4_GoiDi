@@ -99,7 +99,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.doanhThu:
                 replaceFragment(new DoanhThuFragment());
-                this.setTitle(R.string.nav_doanhThu);
+                this.setTitle("Quản lý doanh thu");
+                break;
+            case R.id.quanLyTable:
+                replaceFragment(new TableFragment());
+                this.setTitle("Quản lý bàn");
                 break;
             case R.id.quanLyTable:
                 replaceFragment(new TableFragment());

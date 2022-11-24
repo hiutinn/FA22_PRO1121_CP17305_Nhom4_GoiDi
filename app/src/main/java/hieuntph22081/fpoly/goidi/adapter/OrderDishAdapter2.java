@@ -1,34 +1,28 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 import hieuntph22081.fpoly.goidi.R;
-import hieuntph22081.fpoly.goidi.model.Order;
 import hieuntph22081.fpoly.goidi.model.OrderDish;
 
-public class OrderDishAdapter extends RecyclerView.Adapter<OrderDishAdapter.OrderDishViewHolder> {
+public class OrderDishAdapter2 extends RecyclerView.Adapter<OrderDishAdapter2.OrderDishViewHolder> {
     Context context;
     List<OrderDish> list;
-    public OrderDishAdapter(Context context) {
+
+    public OrderDishAdapter2(Context context) {
         this.context = context;
     }
-
-    public void setData(List<OrderDish> list) {
+    public void setData(List<OrderDish> list){
         this.list = list;
         notifyDataSetChanged();
     }
@@ -45,18 +39,9 @@ public class OrderDishAdapter extends RecyclerView.Adapter<OrderDishAdapter.Orde
         if (orderDish == null)
             return;
         holder.tvName.setText(orderDish.getDish().getTen());
-        holder.tvPrice.setText(formatCurrency(orderDish.getDish().getGia()));
+        holder.tvPrice.setText(String.valueOf(orderDish.getDish().getGia()));
         holder.tvQuantity.setText(String.valueOf(orderDish.getQuantity()));
-        holder.img_delete.setOnClickListener(v -> {
-            list.remove(orderDish);
-            setData(list);
-        });
-    }
-
-    public String formatCurrency(double money) {
-        String pattern="###,###.### VNĐ";
-        DecimalFormat myFormatter = new DecimalFormat(pattern);
-        return myFormatter.format(money);
+        holder.img_delete.setVisibility(View.INVISIBLE);
     }
 
     @Override
