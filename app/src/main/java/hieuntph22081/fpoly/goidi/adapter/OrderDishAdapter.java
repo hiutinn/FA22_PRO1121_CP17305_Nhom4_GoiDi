@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-
+import java.text.DecimalFormat;
 import java.util.List;
 
 import hieuntph22081.fpoly.goidi.R;
@@ -45,12 +45,18 @@ public class OrderDishAdapter extends RecyclerView.Adapter<OrderDishAdapter.Orde
         if (orderDish == null)
             return;
         holder.tvName.setText(orderDish.getDish().getTen());
-        holder.tvPrice.setText(String.valueOf(orderDish.getDish().getGia()));
+        holder.tvPrice.setText(formatCurrency(orderDish.getDish().getGia()));
         holder.tvQuantity.setText(String.valueOf(orderDish.getQuantity()));
         holder.img_delete.setOnClickListener(v -> {
             list.remove(orderDish);
             setData(list);
         });
+    }
+
+    public String formatCurrency(double money) {
+        String pattern="###,###.### VNĐ";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        return myFormatter.format(money);
     }
 
     @Override

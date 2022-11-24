@@ -1,6 +1,7 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -65,6 +66,23 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
             diaLogTable(table);
             return true;
         });
+        holder.imgDelete.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Delete");
+            builder.setMessage("Bạn có muốn xóa không ?");
+            builder.setCancelable(true);
+
+            builder.setPositiveButton("yes", (dialog, which) -> {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("tables");
+                myRef.child(table.getId()).removeValue((error, ref)
+                        -> Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show());
+                dialog.cancel();
+                notifyDataSetChanged();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            builder.show();
+        });
     }
     void diaLogTable(Table table){
         Dialog dialog = new Dialog(context);
@@ -77,7 +95,9 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
         dialog.getWindow().setLayout(width, height);
 
         EditText edt_number = dialog.findViewById(R.id.edt_number);
+        edt_number.setText(String.valueOf(table.getNumber()));
         EditText edt_seat = dialog.findViewById(R.id.edt_seat);
+        edt_seat.setText(String.valueOf(table.getSeat()));
         Button btn_show = dialog.findViewById(R.id.btnShow);
         Button btn_no1 = dialog.findViewById(R.id.btn_No);
         btn_show.setOnClickListener(v -> {
@@ -85,7 +105,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
             table.setNumber(Integer.parseInt(edt_number.getText().toString()));
             myRef.child(table.getId()).updateChildren(table.toMap()).
                     addOnCompleteListener(task ->
-                            Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show());
+                            Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show());
             dialog.dismiss();
         });
 

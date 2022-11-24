@@ -51,7 +51,4 @@
             android:text="@string/hello_blank_fragment" />
 
     </LinearLayout>
-
-
-
 </FrameLayout>

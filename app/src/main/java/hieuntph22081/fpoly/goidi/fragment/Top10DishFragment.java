@@ -81,6 +81,7 @@ public class Top10DishFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewTop10Dish);
         adapter = new MonAnRecycleAdapter(getContext(), dish -> {
         });
+
         //adapter.setData(dishes);
 
 
@@ -139,11 +140,14 @@ public class Top10DishFragment extends Fragment {
                         }
 
                         for (Order order : orders) {
-                            for (OrderDish orderDish : order.getDishes()) {
-                                for (int i = 0; i < orderDish.getQuantity(); i++) {
-                                    dishesId.add(orderDish.getDish().getId());
+                            if (order.getStatus() == 2) {
+                                for (OrderDish orderDish : order.getDishes()) {
+                                    for (int i = 0; i < orderDish.getQuantity(); i++) {
+                                        dishesId.add(orderDish.getDish().getId());
+                                    }
                                 }
                             }
+
                         }
 
                         dishOccurs.clear();
@@ -153,7 +157,7 @@ public class Top10DishFragment extends Fragment {
                             Log.e("size",dish.getId()+"");
                             Log.e("size2",occurrence+"");
                         }
- //                       10-20
+
                         for (int i = 0; i < dishes.size() - 1; i++) {
                             for (int j = i + 1; j < dishes.size(); j++) {
                                 if (dishOccurs.get(i) < dishOccurs.get(j)) {
@@ -182,7 +186,6 @@ public class Top10DishFragment extends Fragment {
             }
         });
     }
-
     private List<Order> getListDistByDate(Order order) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         //13/11 so sanh 17/11 =-1
@@ -209,5 +212,4 @@ public class Top10DishFragment extends Fragment {
         }, year, month, day);
         datePickerDialog.show();
     }
-
 }

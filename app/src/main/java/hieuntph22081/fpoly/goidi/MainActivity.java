@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
         toggle.syncState();
+        toggle.getDrawerArrowDrawable().setColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
         replaceFragment(new OrderFragment());
         this.setTitle(R.string.nav_order);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SpannableString s = new SpannableString("Đăng xuất");
         s.setSpan(new ForegroundColorSpan(Color.RED), 0, s.length(), 0);
-        navigationView.getMenu().getItem(6).getSubMenu().getItem(1).setTitle(s);
+        navigationView.getMenu().getItem(5).getSubMenu().getItem(1).setTitle(s);
     }
 
     @Override
@@ -90,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.top10User:
                 replaceFragment(new Top10UserFragment());
-                this.setTitle("Khách hàng tiềm năng");
+                this.setTitle(R.string.nav_top10_user);
                 break;
             case R.id.top10Dish:r:
                 replaceFragment(new Top10DishFragment());
-                this.setTitle("Top 10 món ăn");
+                this.setTitle(R.string.nav_top10_dish);
                 break;
             case R.id.doanhThu:
                 replaceFragment(new DoanhThuFragment());
@@ -103,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.quanLyTable:
                 replaceFragment(new TableFragment());
                 this.setTitle("Quản lý bàn");
+                break;
+            case R.id.quanLyTable:
+                replaceFragment(new TableFragment());
+                this.setTitle(R.string.nav_table);
                 break;
         }
         drawerLayout.closeDrawer(navigationView);

@@ -39,9 +39,9 @@
     <item android:title="">
         <menu>
             <group android:checkableBehavior="single">
-                <item android:id="@+id/doiMatKhau"
-                    android:title="@string/nav_doiMatKhau"
-                    android:icon="@drawable/ic_baseline_play_arrow_24"/>
+<!--                <item android:id="@+id/doiMatKhau"-->
+<!--                    android:title="@string/nav_doiMatKhau"-->
+<!--                    android:icon="@drawable/ic_baseline_play_arrow_24"/>-->
                 <item android:id="@+id/dangXuat"
                     android:title="@string/nav_dangXuat"
                     android:icon="@drawable/ic_baseline_play_arrow_24"/>
