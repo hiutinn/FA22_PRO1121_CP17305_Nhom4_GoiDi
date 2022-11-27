@@ -1,34 +1,78 @@
 package hieuntph22081.fpoly.goidi.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Order {
     private String id;
     private User user;
-    private Table table;
+    private List<Table> tables;
     private List<OrderDish> dishes;
     private String date;
     private String startTime;
     private String endTime;
+    private String note;
+    private int numberOfPeople;
     private double total;
     private int status;
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("user", user);
+        result.put("tables", tables);
+        result.put("dishes", dishes);
+        result.put("date", date);
+        result.put("startTime", startTime);
+        result.put("endTime", endTime);
+        result.put("note", note);
+        result.put("numberOfPeople", numberOfPeople);
+        result.put("total", total);
+        result.put("status", status);
+        return result;
+    }
 
     public Order() {
     }
 
-    public Order(String id, User user, Table table, List<OrderDish> dishes, String date, String startTime, String endTime, double total, int status) {
+
+    public Order(String id, User user, List<Table> tables, List<OrderDish> dishes, String date, String startTime, String endTime, String note, int numberOfPeople, double total, int status) {
         this.id = id;
         this.user = user;
-        this.table = table;
+        this.tables = tables;
         this.dishes = dishes;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.note = note;
+        this.numberOfPeople = numberOfPeople;
         this.total = total;
         this.status = status;
     }
 
+    public String getNote() {
+        return note;
+    }
 
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public int getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(int numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
+    }
+
+    public List<Table> getTables() {
+        return tables;
+    }
+
+    public void setTables(List<Table> tables) {
+        this.tables = tables;
+    }
 
     public String getId() {
         return id;
@@ -44,14 +88,6 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Table getTable() {
-        return table;
-    }
-
-    public void setTable(Table table) {
-        this.table = table;
     }
 
     public List<OrderDish> getDishes() {

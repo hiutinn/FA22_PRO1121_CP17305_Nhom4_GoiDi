@@ -266,7 +266,7 @@ public class OrderFragment extends Fragment {
             Order order = new Order();
             order.setId("order" + Calendar.getInstance().getTimeInMillis());
             order.setUser(users.get(spnOrderUser.getSelectedItemPosition()));
-            order.setTable(tables.get(spnOrderTable.getSelectedItemPosition()));
+//            order.setTable(tables.get(spnOrderTable.getSelectedItemPosition()));
             order.setDate(edtOrderDate.getText().toString());
             order.setStartTime(edtOrderStartTime.getText().toString());
             order.setEndTime(edtOrderEndTime.getText().toString());

@@ -1,5 +1,6 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -25,10 +26,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +40,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.nex3z.flowlayout.FlowLayout;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,10 +60,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     List<Order> orders;
     FirebaseDatabase database;
     DatabaseReference myRef;
-//    List<OrderDish> list = new ArrayList<>();
     OrderDishAdapter2 adapter;
     List<User> users = new ArrayList<>();
-    List<Table> tables = new ArrayList<>();
+//    List<Table> tables = new ArrayList<>();
+    List<Table> mSelectedTables = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
     List<OrderDish> orderDishes = new ArrayList<>();
     OrderDishAdapter dishAdapter = new OrderDishAdapter(context);
@@ -81,7 +86,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
-        holder.tvOrderTable.setText("Bàn " + order.getTable().getNumber());
+        String tablesStr = "Bàn: ";
+        List<Table> mTables = order.getTables();
+        if (mTables != null) {
+//            Toast.makeText(context, ""+mTables.size(), Toast.LENGTH_SHORT).show();
+            for (Table table : mTables) {
+                tablesStr += table.getNumber();
+                if (mTables.indexOf(table) == mTables.size()-1)
+                    break;
+                tablesStr +=  " , ";
+            }
+            holder.btnTable.setText(tablesStr);
+        }
         holder.tvOrderDate.setText("Ngày: " + order.getDate());
         holder.tvOrderTime.setText(order.getStartTime() + " - " + order.getEndTime());
         switch (order.getStatus()) {
@@ -101,16 +117,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.tvOrderStatus.setText("Hủy");
                 holder.tvOrderStatus.setTextColor(Color.RED);
                 break;
-            case 3:
-                diaLogDelete(order);
-                break;
         }
         holder.tvOrderUser.setText("Khách hàng: " + order.getUser().getName());
-        holder.tvOrderTotal.setText("Tổng tiền: " + formatCurrency(order.getTotal()) );
+        holder.tvOrderTotal.setText("Tổng tiền: " + formatCurrency(order.getTotal()));
         holder.recyclerViewDishes.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         adapter = new OrderDishAdapter2(context);
         adapter.setData(order.getDishes());
         holder.recyclerViewDishes.setAdapter(adapter);
+        holder.btnTable.setOnClickListener(v -> {
+            openChooseTableDialog(order);
+//            holder.btnTable.setText(mSelectedTables.size()+"");
+        });
+
         holder.itemView.setOnClickListener(v -> {
             if (holder.contentLayout.getVisibility() == View.GONE) {
                 holder.contentLayout.setVisibility(View.VISIBLE);
@@ -132,6 +150,95 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
     }
+
+    private void openChooseTableDialog(Order order) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_table);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+
+        List<Table> tables = new ArrayList<>();
+        ChooseTableAdapter adapter = new ChooseTableAdapter(context, tables, selectedTables -> {
+//            Toast.makeText(context, ""+selectedTables.size(), Toast.LENGTH_SHORT).show();
+//            mSelectedTables.clear();
+            if (selectedTables != null)
+                mSelectedTables = selectedTables;
+//            Toast.makeText(context, ""+mSelectedTables.size(), Toast.LENGTH_SHORT).show();
+        });
+        RecyclerView recyclerViewTable = dialog.findViewById(R.id.recyclerViewTable);
+        recyclerViewTable.setLayoutManager(new GridLayoutManager(context, 2));
+        recyclerViewTable.setAdapter(adapter);
+
+        myRef.child("tables").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Table table = dataSnapshot.getValue(Table.class);
+                    tables.add(table);
+                }
+                List<Table> removeList = new ArrayList<>();
+                List<Order> mOrders = orders;
+                for (Order mOrder : mOrders) {
+                    if (!mOrder.getDate().equals(order.getDate()))
+                        continue;
+                    if (mOrder.getStatus() == 2 || mOrder.getStatus() == 3)
+                        continue;
+                    if (mOrder.getTables() == null)
+                        continue;
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                    try {
+                        Date mStartTime = simpleDateFormat.parse(mOrder.getStartTime());
+//                        Date mEndTime = simpleDateFormat.parse(mOrder.getEndTime());
+                        Date startTime = simpleDateFormat.parse(order.getStartTime());
+                        Date endTime = simpleDateFormat.parse(order.getEndTime());
+
+                        // Kiem tra neu thoi gian dat ban cua don nay da co ban nao duoc dat thi
+                        // xoa ban do khoi danh sach chon ban
+                        if (mStartTime.compareTo(startTime) >= 0 && mStartTime.compareTo(endTime) <= 0) {
+                            for (Table table : mOrder.getTables()) {
+                                for (Table table1 : tables) {
+                                    if (table.getId().equals(table1.getId()))
+                                        removeList.add(table1);
+                                }
+                            }
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                tables.removeAll(removeList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
+            Toast.makeText(context, ""+mSelectedTables.size(), Toast.LENGTH_SHORT).show();
+            order.setTables(mSelectedTables);
+            myRef.child("orders").child(order.getId()).updateChildren(order.toMap()).addOnSuccessListener(unused
+                    -> Toast.makeText(context, "Chọn bàn thành công!", Toast.LENGTH_SHORT).show());
+            notifyDataSetChanged();
+            dialog.dismiss();
+        });
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+//    public List<Table> getFilteredTableList(Order order) {
+//        List<Table> tables = new ArrayList<>();
+//
+//
+//
+//        return tables;
+//    }
 
     public void openOrderDialog(Order order) {
         Dialog dialog = new Dialog(context);
@@ -171,27 +278,27 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 //        spnOrderUser.setSelection(users.indexOf(order.getUser()));
 
         Spinner spnOrderTable = dialog.findViewById(R.id.spnOrderTable);
-        myRef.child("tables").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                tables.clear();
-                for (DataSnapshot s : snapshot.getChildren()) {
-                    Table table = s.getValue(Table.class);
-                    tables.add(table);
-                }
-                List<String> tableNames = new ArrayList<>();
-                for (Table t : tables) {
-                    tableNames.add("Bàn số " +  t.getNumber());
-                }
-                spnOrderTable.setAdapter(new ArrayAdapter<>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tableNames));
-                spnOrderTable.setSelection(tableNames.indexOf("Bàn số " + order.getTable().getNumber()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//        myRef.child("tables").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                tables.clear();
+//                for (DataSnapshot s : snapshot.getChildren()) {
+//                    Table table = s.getValue(Table.class);
+//                    tables.add(table);
+//                }
+//                List<String> tableNames = new ArrayList<>();
+//                for (Table t : tables) {
+//                    tableNames.add("Bàn số " +  t.getNumber());
+//                }
+//                spnOrderTable.setAdapter(new ArrayAdapter<>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tableNames));
+////                spnOrderTable.setSelection(tableNames.indexOf("Bàn số " + order.getTable().getNumber()));
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
         EditText edtOrderDate = dialog.findViewById(R.id.edtOrderDate);
         edtOrderDate.setText(order.getDate());
@@ -241,19 +348,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         btnSave.setOnClickListener(v -> {
             order.setUser(users.get(spnOrderUser.getSelectedItemPosition()));
-            order.setTable(tables.get(spnOrderTable.getSelectedItemPosition()));
+//            order.setTable(tables.get(spnOrderTable.getSelectedItemPosition()));
             order.setDate(edtOrderDate.getText().toString());
             order.setStartTime(edtOrderStartTime.getText().toString());
             order.setEndTime(edtOrderEndTime.getText().toString());
             order.setStatus(spnOrderStatus.getSelectedItemPosition());
             order.setDishes(orderDishes);
             order.setTotal();
-            myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
+            myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(unused -> {
+                Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             });
         });
         btnCancel.setOnClickListener(v -> dialog.dismiss());
@@ -371,6 +475,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         ImageView imgEdit, imgDropDown;
         RecyclerView recyclerViewDishes;
         RelativeLayout contentLayout;
+        Button btnTable;
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
             tvOrderTable = itemView.findViewById(R.id.tvOrderTable);
@@ -383,16 +488,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             imgDropDown = itemView.findViewById(R.id.imgDropDown);
             contentLayout = itemView.findViewById(R.id.contentLayout);
             recyclerViewDishes = itemView.findViewById(R.id.recyclerViewDishes);
+            btnTable = itemView.findViewById(R.id.btnTable);
         }
     }
-    public void diaLogDelete(Order order){
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("orders/"+order.getId());
-        databaseRef.removeValue(new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-    }
 }

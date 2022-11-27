@@ -36,8 +36,10 @@
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/white_color.xml" value="0.207" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/activity_main.xml" value="0.16140350877192983" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_choose_table.xml" value="0.2484375" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_dish_picker.xml" value="0.2520833333333333" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_feedback.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_monan.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_order.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_table.xml" value="0.2520833333333333" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_user.xml" value="0.253125" />
@@ -49,6 +51,7 @@
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/fragment_table.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/fragment_user.xml" value="0.1684981684981685" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/header_nav_layout.xml" value="0.20087336244541484" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_choose_table.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_dish_order.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_feedback.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_loai_monan.xml" value="0.253125" />

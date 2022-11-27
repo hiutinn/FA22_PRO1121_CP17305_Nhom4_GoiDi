@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText txtMaTT,txtPassword;
     Button btnLogin;
     CheckBox chkRemember;
+    String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +64,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void login() {
-        String ma = txtMaTT.getText().toString();
+        String phone = txtMaTT.getText().toString();
         String pw = txtPassword.getText().toString();
         boolean status = chkRemember.isChecked();
 
-        if (ma.length() == 0 || pw.length() == 0) {
+        if (phone.length() == 0 || pw.length() == 0) {
             Snackbar.make(findViewById(R.id.loginLayout), "Không để trống thông tin!", Snackbar.LENGTH_SHORT).show();
         } else {
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
@@ -77,18 +78,18 @@ public class LoginActivity extends AppCompatActivity {
                     boolean check = false;
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         User user = snapshot1.getValue(User.class);
-                            if (ma.equals(user.getPhone()) && pw.equals(user.getPassword()) && user.getRole() == 1) {
+                            if (phone.equals(user.getPhone()) && pw.equals(user.getPassword()) && user.getRole() == 1) {
                                 check = true;
                                 break;
                             }
                     }
 
                     if (check) {
-                        savePreference(ma,pw,!status,status);
+                        savePreference(userId,phone,pw,!status,status);
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("maTT", ma);
+                        bundle.putString("userId", userId);
                         intent.putExtra("bundle",bundle);
                         startActivity(intent);
                         finish();
@@ -105,14 +106,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    void savePreference(String ma, String pw, boolean isLogout, boolean status) {
+    void savePreference(String userId, String phone, String pw, boolean isLogout, boolean status) {
         SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
         SharedPreferences.Editor editor = s.edit();
         if (!status) { // Khong luu
             editor.clear();
         } else { // luu
-            editor.putString("U",ma);
-            editor.putString("P",pw);
+            editor.putString("userId",userId);
+            editor.putString("phone",phone);
+            editor.putString("password",pw);
             editor.putBoolean("isLogout", isLogout);
             editor.putBoolean("CHK",status);
         }
@@ -122,8 +124,9 @@ public class LoginActivity extends AppCompatActivity {
     List<Object> readPreference() {
         List<Object> ls = new ArrayList<>();
         SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
-        ls.add(s.getString("U",""));
-        ls.add(s.getString("P",""));
+        ls.add(s.getString("userId",""));
+        ls.add(s.getString("phone",""));
+        ls.add(s.getString("password",""));
         ls.add(s.getBoolean("isLogout",true));
         ls.add(s.getBoolean("CHK",false));
         return ls;
