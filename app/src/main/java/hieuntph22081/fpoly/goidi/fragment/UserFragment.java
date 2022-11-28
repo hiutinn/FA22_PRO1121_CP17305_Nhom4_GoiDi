@@ -155,7 +155,6 @@ public class UserFragment extends Fragment {
                     list.add(user);
                     adapter.notifyDataSetChanged();
                 }
-
             }
 
             @SuppressLint("NotifyDataSetChanged")

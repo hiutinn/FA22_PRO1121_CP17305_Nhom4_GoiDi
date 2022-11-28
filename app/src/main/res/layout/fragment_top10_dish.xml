@@ -47,8 +47,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewTop10Dish"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </FrameLayout>

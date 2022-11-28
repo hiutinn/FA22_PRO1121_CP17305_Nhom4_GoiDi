@@ -31,13 +31,23 @@
                     android:layout_height="wrap_content"
                     android:text="Bàn: Bàn 2"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="invisible"/>
+
+                <Button
+                    android:id="@+id/btnTable"
+                    android:background="@color/black"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bàn" />
 
                 <TextView
                     android:id="@+id/tvOrderDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_toStartOf="@id/imgEdit"
                     android:text="Ngày: 20/11/2022"
                     android:textColor="@color/black"
@@ -47,7 +57,7 @@
                     android:id="@+id/tvOrderTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvOrderTable"
+                    android:layout_below="@+id/btnTable"
                     android:layout_marginTop="10dp"
                     android:text="Từ 12:20 đến 15:00"
                     android:textColor="@color/black"
@@ -57,7 +67,7 @@
                     android:id="@+id/tvOrderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvOrderTable"
+                    android:layout_below="@+id/btnTable"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@id/imgEdit"
