@@ -159,13 +159,30 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
 
+        getFilteredTablesList(dialog, order);
+
+        dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
+            Toast.makeText(context, ""+mSelectedTables.size(), Toast.LENGTH_SHORT).show();
+            order.setTables(mSelectedTables);
+            myRef.child("orders").child(order.getId()).updateChildren(order.toMap()).addOnSuccessListener(unused
+                    -> Toast.makeText(context, "Chọn bàn thành công!", Toast.LENGTH_SHORT).show());
+            notifyDataSetChanged();
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.btnCancel).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void getFilteredTablesList(Dialog dialog, Order order) {
         List<Table> tables = new ArrayList<>();
-        ChooseTableAdapter adapter = new ChooseTableAdapter(context, tables, selectedTables -> {
-//            Toast.makeText(context, ""+selectedTables.size(), Toast.LENGTH_SHORT).show();
-//            mSelectedTables.clear();
+        mSelectedTables = order.getTables();
+        ChooseTableAdapter adapter = new ChooseTableAdapter(context, tables,mSelectedTables, selectedTables -> {
             if (selectedTables != null)
                 mSelectedTables = selectedTables;
-//            Toast.makeText(context, ""+mSelectedTables.size(), Toast.LENGTH_SHORT).show();
         });
         RecyclerView recyclerViewTable = dialog.findViewById(R.id.recyclerViewTable);
         recyclerViewTable.setLayoutManager(new GridLayoutManager(context, 2));
@@ -182,6 +199,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 List<Table> removeList = new ArrayList<>();
                 List<Order> mOrders = orders;
                 for (Order mOrder : mOrders) {
+                    if (mOrder.getId().equals(order.getId()))
+                        continue;
                     if (!mOrder.getDate().equals(order.getDate()))
                         continue;
                     if (mOrder.getStatus() == 2 || mOrder.getStatus() == 3)
@@ -191,7 +210,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                     try {
                         Date mStartTime = simpleDateFormat.parse(mOrder.getStartTime());
-//                        Date mEndTime = simpleDateFormat.parse(mOrder.getEndTime());
                         Date startTime = simpleDateFormat.parse(order.getStartTime());
                         Date endTime = simpleDateFormat.parse(order.getEndTime());
 
@@ -219,26 +237,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
             }
         });
-
-        dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
-            Toast.makeText(context, ""+mSelectedTables.size(), Toast.LENGTH_SHORT).show();
-            order.setTables(mSelectedTables);
-            myRef.child("orders").child(order.getId()).updateChildren(order.toMap()).addOnSuccessListener(unused
-                    -> Toast.makeText(context, "Chọn bàn thành công!", Toast.LENGTH_SHORT).show());
-            notifyDataSetChanged();
-            dialog.dismiss();
-        });
-        dialog.setCancelable(true);
-        dialog.show();
     }
 
-//    public List<Table> getFilteredTableList(Order order) {
-//        List<Table> tables = new ArrayList<>();
-//
-//
-//
-//        return tables;
-//    }
 
     public void openOrderDialog(Order order) {
         Dialog dialog = new Dialog(context);
@@ -266,7 +266,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 }
                 spnOrderUser.setAdapter(new ArrayAdapter<>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
                 spnOrderUser.setSelection(userNames.indexOf(order.getUser().getName()));
-                Log.e("TAG", ": "+  userNames.indexOf(order.getUser().getName()));
             }
 
             @Override
