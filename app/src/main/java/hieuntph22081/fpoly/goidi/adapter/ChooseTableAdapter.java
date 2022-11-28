@@ -21,14 +21,15 @@ public class ChooseTableAdapter extends RecyclerView.Adapter<ChooseTableAdapter.
     Context context;
     List<Table> tables;
     IClickListener iClickListener;
-    List<Table> selectedTables = new ArrayList<>();
+    List<Table> selectedTables;
     public interface IClickListener {
         void OnItemClick(List<Table> tables);
     }
 
-    public ChooseTableAdapter(Context context, List<Table> tables, IClickListener iClickListener) {
+    public ChooseTableAdapter(Context context, List<Table> tables,List<Table> selectedTables, IClickListener iClickListener) {
         this.context = context;
         this.tables = tables;
+        this.selectedTables = selectedTables;
         this.iClickListener = iClickListener;
     }
 
@@ -42,13 +43,39 @@ public class ChooseTableAdapter extends RecyclerView.Adapter<ChooseTableAdapter.
     public void onBindViewHolder(@NonNull ChooseTableViewHolder holder, int position) {
         Table table = tables.get(position);
         holder.tvTableNumber.setText("Bàn" + table.getNumber());
+        for (Table table1 : selectedTables) {
+            if (table1.getId().equals(table.getId())) {
+                holder.chkSelect.setChecked(true);
+                break;
+            }
+        }
+
         holder.itemView.setOnClickListener(v -> {
             holder.chkSelect.setChecked(!holder.chkSelect.isChecked());
             if (holder.chkSelect.isChecked()) {
                 if (!selectedTables.contains(table)) {
                     selectedTables.add(table);
-//                    Toast.makeText(context, ""+selectedTables.size(), Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                for (Table table1 : selectedTables) {
+                    if (table1.getId().equals(table.getId())) {
+                        selectedTables.remove(table1);
+                        break;
+                    }
+                }
+
+            }
+            iClickListener.OnItemClick(selectedTables);
+        });
+
+        holder.chkSelect.setOnClickListener(v -> {
+            holder.chkSelect.setChecked(!holder.chkSelect.isChecked());
+            if (holder.chkSelect.isChecked()) {
+                if (!selectedTables.contains(table)) {
+                    selectedTables.add(table);
+                }
+            } else {
+                selectedTables.remove(table);
             }
             iClickListener.OnItemClick(selectedTables);
         });
