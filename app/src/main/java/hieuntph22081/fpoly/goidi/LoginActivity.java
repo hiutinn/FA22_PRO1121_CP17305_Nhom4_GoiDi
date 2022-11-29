@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -69,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean status = chkRemember.isChecked();
 
         if (phone.length() == 0 || pw.length() == 0) {
-            Snackbar.make(findViewById(R.id.loginLayout), "Không để trống thông tin!", Snackbar.LENGTH_SHORT).show();
+            openFailDialog("Không để trống thông tin");
         } else {
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
             myRef.child("users").addValueEventListener(new ValueEventListener() {
@@ -86,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (check) {
                         savePreference(userId,phone,pw,!status,status);
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        openSuccessDialog("Đăng nhập thành công");
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("userId", userId);
@@ -94,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else
-                        Snackbar.make(findViewById(R.id.loginLayout), "Thông tin đăng nhập không chính xác!", Snackbar.LENGTH_SHORT).show();
+                        openFailDialog("Thông tin đăng nhập không chính xác");
                 }
 
                 @Override
@@ -130,5 +136,39 @@ public class LoginActivity extends AppCompatActivity {
         ls.add(s.getBoolean("isLogout",true));
         ls.add(s.getBoolean("CHK",false));
         return ls;
+    }
+
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

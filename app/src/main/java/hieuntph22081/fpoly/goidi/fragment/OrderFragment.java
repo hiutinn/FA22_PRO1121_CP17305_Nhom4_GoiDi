@@ -180,8 +180,6 @@ public class OrderFragment extends Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_order);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
-//        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.58);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
         TextView dialogUserTitle = dialog.findViewById(R.id.dialogUserTitle);
         dialogUserTitle.setText("Thêm Order");
@@ -201,7 +199,6 @@ public class OrderFragment extends Fragment {
                         userNames.add(u.getName());
                     }
                     spnOrderUser.setAdapter(new ArrayAdapter<>(getActivity(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
-
                 }
             }
 
@@ -211,27 +208,7 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        Spinner spnOrderTable = dialog.findViewById(R.id.spnOrderTable);
-        myRef.child("tables").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for (DataSnapshot s : snapshot.getChildren()) {
-                    Table table = s.getValue(Table.class);
-                    tables.add(table);
-                }
-                List<String> tableNames = new ArrayList<>();
-                for (Table t : tables) {
-                    tableNames.add("Bàn số " +  t.getNumber());
-                }
-                spnOrderTable.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tableNames));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         EditText edtOrderDate = dialog.findViewById(R.id.edtOrderDate);
         edtOrderDate.setOnClickListener(v -> {datePickerDialog(edtOrderDate);});
         EditText edtOrderStartTime = dialog.findViewById(R.id.edtOrderStartTime);
@@ -266,7 +243,6 @@ public class OrderFragment extends Fragment {
             Order order = new Order();
             order.setId("order" + Calendar.getInstance().getTimeInMillis());
             order.setUser(users.get(spnOrderUser.getSelectedItemPosition()));
-//            order.setTable(tables.get(spnOrderTable.getSelectedItemPosition()));
             order.setDate(edtOrderDate.getText().toString());
             order.setStartTime(edtOrderStartTime.getText().toString());
             order.setEndTime(edtOrderEndTime.getText().toString());

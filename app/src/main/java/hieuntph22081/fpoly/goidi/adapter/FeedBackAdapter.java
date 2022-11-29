@@ -1,10 +1,15 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,13 +75,30 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference myRef = database.getReference("feedbacks");
                     myRef.child(feedBack.getId()).removeValue((error, ref)
-                            -> Toast.makeText(context, "Xóa thành công!", Toast.LENGTH_SHORT).show());
+                            -> openSuccessDialog("Xóa thành công"));
                     dialog.cancel();
                     notifyDataSetChanged();
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
                 builder.show();
             });
+    }
+
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 
     @Override
@@ -91,7 +113,6 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
         ImageView imgDropDown, imgDelete;
         public ViewHodler(@NonNull View itemView) {
             super(itemView);
-//            tv_id = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.txtID);
             tv_content = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.txtContent);
             tv_userId = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.txtUserID);
             tv_date = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.txtDate);

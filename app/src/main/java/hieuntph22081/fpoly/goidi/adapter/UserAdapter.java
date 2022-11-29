@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -111,7 +112,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("users");
             myRef.child(id).removeValue((error, ref)
-                    -> Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show());
+                    -> openSuccessDialog("Xóa thành công"));
             dialog.cancel();
             notifyDataSetChanged();
         });
@@ -164,7 +165,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 }
 
                 myRef.child(String.valueOf(user.getId())).updateChildren(user.toMap(), (error, ref) -> {
-                    Toast.makeText(context, "Update thành công", Toast.LENGTH_SHORT).show();
+                    openSuccessDialog("Cập nhập thành công");
                     dialog.dismiss();
                 });
                 notifyDataSetChanged();
@@ -174,16 +175,49 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     }
 
     public int validate() {
-        int check = 1;
         if (edtTenTv.getText().length() == 0 || edtPhone.getText().length() == 0) {
-            Toast.makeText(context, "Ban phai nhap day du thong tin!", Toast.LENGTH_SHORT).show();
-            check = -1;
+            openFailDialog("Bạn phải nhập đủ thông tin");
+            return  -1;
         }
 
         if (!rdoRoleClient.isChecked() && !rdoRoleAdmin.isChecked()) {
-            Toast.makeText(context, "Hãy chọn vai trò của người dùng!", Toast.LENGTH_SHORT).show();
-            check = -1;
+            openFailDialog("Hãy chọn vai trò của người dùng");
+            return  -1;
         }
-        return check;
+        return 1;
+    }
+
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

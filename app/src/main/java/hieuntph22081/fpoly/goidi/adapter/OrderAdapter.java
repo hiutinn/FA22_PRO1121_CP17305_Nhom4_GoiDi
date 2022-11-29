@@ -1,15 +1,12 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nex3z.flowlayout.FlowLayout;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -89,7 +82,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         String tablesStr = "Bàn: ";
         List<Table> mTables = order.getTables();
         if (mTables != null) {
-//            Toast.makeText(context, ""+mTables.size(), Toast.LENGTH_SHORT).show();
             for (Table table : mTables) {
                 tablesStr += table.getNumber();
                 if (mTables.indexOf(table) == mTables.size()-1)
@@ -138,7 +130,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.imgDropDown.setImageResource(R.drawable.ic_drop_down);
             }
         });
-        if(order.getStatus()==2){
+        if(order.getStatus()==2 || order.getStatus() == 3){
             holder.imgEdit.setEnabled(false);
             holder.imgEdit.setVisibility(View.INVISIBLE);
         }else{
@@ -162,10 +154,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         getFilteredTablesList(dialog, order);
 
         dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
-            Toast.makeText(context, ""+mSelectedTables.size(), Toast.LENGTH_SHORT).show();
+
             order.setTables(mSelectedTables);
             myRef.child("orders").child(order.getId()).updateChildren(order.toMap()).addOnSuccessListener(unused
-                    -> Toast.makeText(context, "Chọn bàn thành công!", Toast.LENGTH_SHORT).show());
+                    -> openSuccessDialog("Chọn bàn thành công"));
+
             notifyDataSetChanged();
             dialog.dismiss();
         });
@@ -276,28 +269,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
 //        spnOrderUser.setSelection(users.indexOf(order.getUser()));
 
-        Spinner spnOrderTable = dialog.findViewById(R.id.spnOrderTable);
-//        myRef.child("tables").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                tables.clear();
-//                for (DataSnapshot s : snapshot.getChildren()) {
-//                    Table table = s.getValue(Table.class);
-//                    tables.add(table);
-//                }
-//                List<String> tableNames = new ArrayList<>();
-//                for (Table t : tables) {
-//                    tableNames.add("Bàn số " +  t.getNumber());
-//                }
-//                spnOrderTable.setAdapter(new ArrayAdapter<>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, tableNames));
-////                spnOrderTable.setSelection(tableNames.indexOf("Bàn số " + order.getTable().getNumber()));
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
         EditText edtOrderDate = dialog.findViewById(R.id.edtOrderDate);
         edtOrderDate.setText(order.getDate());
@@ -347,7 +318,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         btnSave.setOnClickListener(v -> {
             order.setUser(users.get(spnOrderUser.getSelectedItemPosition()));
-//            order.setTable(tables.get(spnOrderTable.getSelectedItemPosition()));
             order.setDate(edtOrderDate.getText().toString());
             order.setStartTime(edtOrderStartTime.getText().toString());
             order.setEndTime(edtOrderEndTime.getText().toString());
@@ -355,7 +325,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             order.setDishes(orderDishes);
             order.setTotal();
             myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(unused -> {
-                Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                openSuccessDialog("Cập nhật thành công");
                 dialog.dismiss();
             });
         });
@@ -426,7 +396,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderDishes.add(orderDish);
             dishAdapter.setData(orderDishes);
         });
-        Toast.makeText(context, ""+orderDishes.size(), Toast.LENGTH_SHORT).show();
         btnOk.setOnClickListener(v -> dialog.dismiss());
         dialog.setCancelable(true);
         dialog.show();
@@ -445,6 +414,23 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             editText.setText(simpleDateFormat.format(calendar.getTime()));
         },year1,month1,day1);
         datePickerDialog.show();
+    }
+
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 
     private void timePickerDialog(EditText editText){
