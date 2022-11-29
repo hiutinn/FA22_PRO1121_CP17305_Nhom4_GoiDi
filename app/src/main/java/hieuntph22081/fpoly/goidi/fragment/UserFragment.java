@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -121,7 +122,7 @@ public class UserFragment extends Fragment {
                     item.setRole(1);
                 }
                 String pathObject = String.valueOf(item.getId());
-                myRef.child(pathObject).setValue(item, (error, ref) -> Toast.makeText(getContext(), "Thêm thành công", Toast.LENGTH_SHORT).show());
+                myRef.child(pathObject).setValue(item, (error, ref) -> openSuccessDialog("Thêm người dùng thành công"));
                 dialog.dismiss();
             }
         });
@@ -131,12 +132,12 @@ public class UserFragment extends Fragment {
     public int validate() {
         int check = 1;
         if (edtTenTv.getText().length() == 0 || edtPhone.getText().length() == 0 || edtPassword.getText().length() == 0) {
-            Toast.makeText(getContext(), "Không để trống thông tin!", Toast.LENGTH_SHORT).show();
+            openFailDialog("Không để trống thông tin");
             check = -1;
         }
 
         if (!rdoRoleClient.isChecked() && !rdoRoleAdmin.isChecked()) {
-            Toast.makeText(getContext(), "Hãy chọn vai trò của người dùng!", Toast.LENGTH_SHORT).show();
+            openFailDialog("Hãy chọn vai trò của người dùng");
             check = -1;
         }
         return check;
@@ -199,5 +200,38 @@ public class UserFragment extends Fragment {
 
             }
         });
+    }
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

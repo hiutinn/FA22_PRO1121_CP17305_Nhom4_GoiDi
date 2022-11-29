@@ -129,8 +129,6 @@ public class DoanhThuFragment extends Fragment {
         datePickerDialog.show();
     }
 
-
-
     public String formatCurrency(double money) {
         String pattern="###,###.### VNĐ";
         DecimalFormat myFormatter = new DecimalFormat(pattern);

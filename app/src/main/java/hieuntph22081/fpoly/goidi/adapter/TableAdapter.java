@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -76,7 +77,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("tables");
                 myRef.child(table.getId()).removeValue((error, ref)
-                        -> Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show());
+                        -> openSuccessDialog("Xóa thành công"));
                 dialog.cancel();
                 notifyDataSetChanged();
             });
@@ -105,7 +106,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
             table.setNumber(Integer.parseInt(edt_number.getText().toString()));
             myRef.child(table.getId()).updateChildren(table.toMap()).
                     addOnCompleteListener(task ->
-                            Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show());
+                    openSuccessDialog("Cập nhật thành công"));
             dialog.dismiss();
         });
 
@@ -130,6 +131,39 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
             tvSeat = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.tvSeat);
             imgDelete = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.imgDelete);
         }
+    }
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }
 

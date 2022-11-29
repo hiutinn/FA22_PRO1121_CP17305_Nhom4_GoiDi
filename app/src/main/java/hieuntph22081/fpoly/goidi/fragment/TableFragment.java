@@ -17,8 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -116,7 +118,7 @@ public class TableFragment extends Fragment {
             table.setSeat(Integer.parseInt(edt_seat.getText().toString()));
             myRef.child(table.getId()).setValue(table).
                     addOnCompleteListener(task ->
-                            Toast.makeText(requireActivity(), "Insert Successfully", Toast.LENGTH_SHORT).show());
+                            openSuccessDialog("Thêm bàn thành công"));
             dialog.dismiss();
         });
 
@@ -182,5 +184,21 @@ public class TableFragment extends Fragment {
 
             }
         });
+    }
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

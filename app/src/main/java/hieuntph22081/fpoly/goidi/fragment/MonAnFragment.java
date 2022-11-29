@@ -3,11 +3,13 @@ package hieuntph22081.fpoly.goidi.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,9 +28,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -72,11 +77,6 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    public static MonAnFragment newInstance() {
-        MonAnFragment fragment = new MonAnFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,12 +98,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         recyclerView = view.findViewById(R.id.recycle_monAn);
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Dish");
         getListDishFromFireBase();
-        adapter = new MonAnRecycleAdapter(getActivity(), new MonAnRecycleAdapter.IClickListener() {
-            @Override
-            public void OnClickUpdateItem(Dish dish) {
-                openDiaLogUpdateDish(dish);
-            }
-        });
+        adapter = new MonAnRecycleAdapter(getActivity(), dish -> openDiaLogUpdateDish(dish));
         adapter.setData(listDish);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -174,10 +169,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         LinearLayout linear_camera = view.findViewById(R.id.linear_camera);
         LinearLayout linear_gallery = view.findViewById(R.id.linear_gallery);
         builder.setView(view);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
         });
         AlertDialog alertDialog = builder.create();
         linear_camera.setOnClickListener(v -> {
@@ -287,23 +279,10 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         if (uri != null) {
             storageRef = FirebaseStorage.getInstance().getReference("image/Dish"+ calendar.getTimeInMillis());
             storageRef.putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    databaseRef.child("dish"+calendar.getTimeInMillis()+"/img").setValue(uri.toString());
-                                    Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
+                        databaseRef.child("dish"+calendar.getTimeInMillis()+"/img").setValue(uri1.toString());
+                        openSuccessDialog("Thành công");
+                    })).addOnFailureListener(e -> openFailDialog("Thất bại"));
         }
     }
 
@@ -315,23 +294,10 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         byte[] data = baos.toByteArray();
         storageRef = FirebaseStorage.getInstance().getReference("image/dish" + calendar.getTimeInMillis()  );
         storageRef.putBytes(data)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
-                                databaseRef.child("dish"+calendar.getTimeInMillis()+"/img").setValue(uri.toString());
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    openSuccessDialog("Thành công");
+                    databaseRef.child("dish"+calendar.getTimeInMillis()+"/img").setValue(uri.toString());
+                })).addOnFailureListener(e -> openFailDialog("Thất bại"));
     }
 
     private void upDateGallery(Uri uri,Dish dish) {
@@ -339,23 +305,13 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         if (uri != null) {
             storageRef = FirebaseStorage.getInstance().getReference("image/Dish"+ calendar.getTimeInMillis());
             storageRef.putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    databaseRef.child(dish.getId()+"/img").setValue(uri.toString());
-                                    Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        public void onSuccess(Uri uri1) {
+                            databaseRef.child(dish.getId()+"/img").setValue(uri1.toString());
+                            openSuccessDialog("Thành công");
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    })).addOnFailureListener(e -> openFailDialog("Thất bại"));
         }
     }
     private void upDateCamera(Dish dish) {
@@ -366,23 +322,13 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         byte[] data = baos.toByteArray();
         storageRef = FirebaseStorage.getInstance().getReference("image/dish" + calendar.getTimeInMillis()  );
         storageRef.putBytes(data)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
-                                databaseRef.child(dish.getId()+"/img").setValue(uri.toString());
-                            }
-                        });
+                    public void onSuccess(Uri uri) {
+                        Toast.makeText(getActivity(), "Thành công", Toast.LENGTH_SHORT).show();
+                        databaseRef.child(dish.getId()+"/img").setValue(uri.toString());
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                })).addOnFailureListener(e -> openFailDialog("Thất bại"));
     }
 
     private void openDiaLogUpdateDish(Dish dish){
@@ -411,17 +357,47 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
             String tenDish = ed_ten.getText().toString();
             double giaDish = Double.parseDouble(ed_gia.getText().toString());
             Dish dish1 = new Dish(tenDish,giaDish,"");
-            databaseRef.child(String.valueOf(dish.getId())).updateChildren(dish1.toMap(), new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                    Toast.makeText(getActivity(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                }
-            });
+            databaseRef.child(String.valueOf(dish.getId())).updateChildren(dish1.toMap(), (error, ref)
+                    -> openSuccessDialog("Cập nhật thành công"));
             alertDialog.cancel();
         });
         view.findViewById(R.id.btn_diaLogMonAn_huy).setOnClickListener(v -> {
             alertDialog.cancel();
         });
         alertDialog.show();
+    }
+
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }
