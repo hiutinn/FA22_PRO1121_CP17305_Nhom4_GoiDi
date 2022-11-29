@@ -154,9 +154,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         getFilteredTablesList(dialog, order);
 
         dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
+
             order.setTables(mSelectedTables);
             myRef.child("orders").child(order.getId()).updateChildren(order.toMap()).addOnSuccessListener(unused
                     -> openSuccessDialog("Chọn bàn thành công"));
+
             notifyDataSetChanged();
             dialog.dismiss();
         });
