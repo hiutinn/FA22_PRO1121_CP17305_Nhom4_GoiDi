@@ -6,9 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,7 +20,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private FrameLayout frameLayout;
+    String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +49,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        Bundle loginbBundle = getIntent().getBundleExtra("bundle");
+        if (loginbBundle != null)
+            userId = loginbBundle.getString("userId");
 
+        Log.e("TAG", "onCreate: " + userId );
+        getToken();
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerLayout);
         toolbar = findViewById(R.id.toolBar);
@@ -68,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id) {
             case R.id.dangXuat:
-                savePreference("admin","admin",true,false);
+                savePreference(userId,"","",true,false);
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -125,18 +136,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    void savePreference(String ma, String pw, boolean isLogout, boolean status) {
+    void savePreference(String userId, String phone, String pw, boolean isLogout, boolean status) {
         SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
         SharedPreferences.Editor editor = s.edit();
         if (!status) { // Khong luu
             editor.clear();
         } else { // luu
-            editor.putString("U",ma);
-            editor.putString("P",pw);
+            editor.putString("userId",userId);
+            editor.putString("phone",phone);
+            editor.putString("password",pw);
             editor.putBoolean("isLogout", isLogout);
             editor.putBoolean("CHK",status);
         }
         editor.commit();
     }
 
+
+    public void getToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+
+                    // Log and toast
+                    Log.e("TAG", "getToken: " + token );
+                    FirebaseDatabase.getInstance().getReference("users").child(userId+"/token").setValue(token).addOnSuccessListener(unused -> Toast.makeText(MainActivity.this, "Insert successfully", Toast.LENGTH_SHORT).show());
+                });
+    }
 }

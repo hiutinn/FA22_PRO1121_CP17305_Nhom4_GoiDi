@@ -25,6 +25,7 @@ import java.util.List;
 
 import hieuntph22081.fpoly.goidi.R;
 import hieuntph22081.fpoly.goidi.model.FeedBack;
+import hieuntph22081.fpoly.goidi.model.Table;
 
 public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHodler>{
     private List<FeedBack> feedBackList;
@@ -54,6 +55,17 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
             holder.tv_content.setText(String.valueOf(feedBack.getContent()));
             holder.tv_date.setText(String.valueOf(feedBack.getDate()));
             holder.tv_userId.setText(String.valueOf(feedBack.getUser().getName()));
+            if (feedBack.getOrder() != null) {
+                String tableStr = "Bàn: ";
+                for (Table table : feedBack.getOrder().getTables()) {
+                    tableStr += table.getNumber();
+                    if (feedBack.getOrder().getTables().indexOf(table) == feedBack.getOrder().getTables().size()-1)
+                        break;
+                    tableStr +=  " , ";
+                }
+                holder.tvTable.setText(tableStr);
+                holder.tvNoP.setText(feedBack.getOrder().getNumberOfPeople() + " người");
+            }
             holder.imgDropDown.setImageResource(R.drawable.ic_drop_down);
             holder.itemView.setOnClickListener(v -> {
                 if (holder.contentLayout.getVisibility() == View.GONE) {
@@ -63,7 +75,6 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
                     holder.contentLayout.setVisibility(View.GONE);
                     holder.imgDropDown.setImageResource(R.drawable.ic_drop_down);
                 }
-
             });
             holder.imgDelete.setOnClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -108,7 +119,7 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
     }
 
     public class ViewHodler extends RecyclerView.ViewHolder{
-        TextView tv_content,tv_userId,tv_date;
+        TextView tv_content,tv_userId,tv_date, tvTable, tvNoP;
         RelativeLayout contentLayout;
         ImageView imgDropDown, imgDelete;
         public ViewHodler(@NonNull View itemView) {
@@ -119,6 +130,8 @@ public class FeedBackAdapter extends RecyclerView.Adapter<FeedBackAdapter.ViewHo
             contentLayout = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.contentLayout);
             imgDropDown = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.imgDropDown);
             imgDelete = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.imgDelete);
+            tvTable = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.tvTable);
+            tvNoP = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.tvNoP);
         }
     }
 }

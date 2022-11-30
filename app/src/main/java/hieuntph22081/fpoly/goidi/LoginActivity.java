@@ -52,16 +52,16 @@ public class LoginActivity extends AppCompatActivity {
         List<Object> chkList;
         chkList = readPreference();
         if (chkList.size()>0) {
-            if (!Boolean.parseBoolean(chkList.get(2).toString())) {
+            if (!Boolean.parseBoolean(chkList.get(3).toString())) {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("maTT", chkList.get(0).toString());
+                bundle.putString("userId", chkList.get(0).toString());
                 intent.putExtra("bundle",bundle);
                 startActivity(intent);
                 finish();
             } else {
-                txtMaTT.setText(chkList.get(0).toString());
-                txtPassword.setText(chkList.get(1).toString());
+                txtMaTT.setText(chkList.get(1).toString());
+                txtPassword.setText(chkList.get(2).toString());
                 chkRemember.setChecked(Boolean.parseBoolean(chkList.get(3).toString()));
             }
         }
@@ -84,8 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                     boolean check = false;
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         User user = snapshot1.getValue(User.class);
-                            if (phone.equals(user.getPhone()) && pw.equals(user.getPassword()) && user.getRole() == 1) {
+                            if (phone.equals(user.getPhone()) && pw.equals(user.getPassword()) && user.getRole() == 0) {
                                 check = true;
+                                userId = user.getId();
                                 break;
                             }
                     }
