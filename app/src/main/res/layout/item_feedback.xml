@@ -24,7 +24,6 @@
                 android:id="@+id/txtUserID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:text="Hieu"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -33,10 +32,30 @@
                 android:id="@+id/txtDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@+id/imgDelete"
                 android:text="12/12/2012"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtUserID"
+                android:layout_marginEnd="10dp"
+                android:text="Bàn 1"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvNoP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtDate"
+                android:layout_marginEnd="10dp"
+                android:text="4 người"
+                android:layout_toStartOf="@+id/imgDelete"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

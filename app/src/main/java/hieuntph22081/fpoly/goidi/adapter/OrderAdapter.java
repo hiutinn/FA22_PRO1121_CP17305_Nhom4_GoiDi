@@ -55,7 +55,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     DatabaseReference myRef;
     OrderDishAdapter2 adapter;
     List<User> users = new ArrayList<>();
-//    List<Table> tables = new ArrayList<>();
     List<Table> mSelectedTables = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
     List<OrderDish> orderDishes = new ArrayList<>();
@@ -110,6 +109,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.tvOrderStatus.setTextColor(Color.RED);
                 break;
         }
+        holder.tvOrderNoP.setText(order.getNumberOfPeople() + " người");
         holder.tvOrderUser.setText("Khách hàng: " + order.getUser().getName());
         holder.tvOrderTotal.setText("Tổng tiền: " + formatCurrency(order.getTotal()));
         holder.recyclerViewDishes.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
@@ -172,7 +172,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public void getFilteredTablesList(Dialog dialog, Order order) {
         List<Table> tables = new ArrayList<>();
-        mSelectedTables = order.getTables();
+        if (order.getTables() != null)
+            mSelectedTables = order.getTables();
         ChooseTableAdapter adapter = new ChooseTableAdapter(context, tables,mSelectedTables, selectedTables -> {
             if (selectedTables != null)
                 mSelectedTables = selectedTables;
@@ -456,7 +457,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     public class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView tvOrderTable, tvOrderDate, tvOrderTime, tvOrderStatus, tvOrderUser, tvOrderTotal;
+        TextView tvOrderTable, tvOrderDate, tvOrderTime, tvOrderStatus, tvOrderUser, tvOrderTotal, tvOrderNoP;
         ImageView imgEdit, imgDropDown;
         RecyclerView recyclerViewDishes;
         RelativeLayout contentLayout;
@@ -474,6 +475,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             contentLayout = itemView.findViewById(R.id.contentLayout);
             recyclerViewDishes = itemView.findViewById(R.id.recyclerViewDishes);
             btnTable = itemView.findViewById(R.id.btnTable);
+            tvOrderNoP = itemView.findViewById(R.id.tvOrderNoP);
         }
     }
 

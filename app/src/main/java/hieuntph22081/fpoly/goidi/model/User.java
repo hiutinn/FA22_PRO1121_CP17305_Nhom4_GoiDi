@@ -8,6 +8,7 @@ public class User implements Serializable {
     private String id, name, phone, password;
     private int role;
     private int soLan;
+    private String token;
 
     public User() {
     }
@@ -20,13 +21,22 @@ public class User implements Serializable {
         return result;
     }
 
-    public User(String id, String name, String phone, String password, int role, int soLan) {
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public User(String id, String name, String phone, String password, int role, int soLan, String token) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.password = password;
         this.role = role;
         this.soLan = soLan;
+        this.token = token;
     }
 
     public String getId() {

@@ -226,8 +226,8 @@ public class OrderFragment extends Fragment {
         Button btnOrderDish = dialog.findViewById(R.id.btnOrderDish);
         btnOrderDish.setOnClickListener(v -> {
             orderDishes = openDishDialog();
-
         });
+
         orderDishes.clear();
         dishAdapter.setData(orderDishes);
         recyclerView_orderDish = dialog.findViewById(R.id.recycleView_orderDish);
@@ -249,6 +249,7 @@ public class OrderFragment extends Fragment {
             order.setStatus(spnOrderStatus.getSelectedItemPosition());
             order.setDishes(orderDishes);
             order.setTotal();
+
             myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {

@@ -21,7 +21,7 @@ public class ChooseTableAdapter extends RecyclerView.Adapter<ChooseTableAdapter.
     Context context;
     List<Table> tables;
     IClickListener iClickListener;
-    List<Table> selectedTables;
+    List<Table> selectedTables = new ArrayList<>();
     public interface IClickListener {
         void OnItemClick(List<Table> tables);
     }
