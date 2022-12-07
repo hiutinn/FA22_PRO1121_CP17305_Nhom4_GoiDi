@@ -44,6 +44,7 @@
 <!--                    android:icon="@drawable/ic_baseline_play_arrow_24"/>-->
                 <item android:id="@+id/dangXuat"
                     android:title="@string/nav_dangXuat"
+                    
                     android:icon="@drawable/ic_baseline_play_arrow_24"/>
             </group>
         </menu>

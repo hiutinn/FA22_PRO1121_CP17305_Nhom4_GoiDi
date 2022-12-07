@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:gravity="center"
         android:background="@drawable/bg_yellow_corner_16_top_left_top_right"
@@ -24,9 +24,9 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="vertical"
-        android:background="@color/gray">
+        android:background="#FFFFFF">
         <androidx.recyclerview.widget.RecyclerView
-            android:background="@color/gray"
+            android:background="@color/white"
             android:id="@+id/recyclerViewTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

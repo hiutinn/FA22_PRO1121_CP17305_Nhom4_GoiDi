@@ -40,7 +40,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header_nav_layout"
         app:menu="@menu/nav_menu"
-        android:background="#000"
+        android:background="#00BCD4"
         app:itemIconTint="@color/white"
         app:itemShapeFillColor="@color/white"
         app:itemIconPadding="40dp"

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:gravity="center"
         android:background="@drawable/bg_yellow_corner_16_top_left_top_right"
@@ -54,7 +54,9 @@
             android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/btnAdd"
+            android:textColor="@color/white"
             android:text="Thêm"
+            android:background="@drawable/bg_gray_corner_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <androidx.recyclerview.widget.RecyclerView

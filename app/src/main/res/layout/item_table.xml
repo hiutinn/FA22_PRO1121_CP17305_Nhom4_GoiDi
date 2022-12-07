@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F4E879"
+        android:background="@drawable/bg_gray_corner_10"
         android:padding="16dp">
         <LinearLayout
             android:layout_width="0dp"
@@ -21,14 +21,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bàn số 1"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/tvSeat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="8 chỗ"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:layout_marginTop="10dp"/>
         </LinearLayout>

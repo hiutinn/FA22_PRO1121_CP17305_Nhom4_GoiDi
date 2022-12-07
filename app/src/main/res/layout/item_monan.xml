@@ -9,7 +9,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F4E879"
+            android:background="@drawable/bg_gray_corner_10"
             android:padding="10dp">
             <ImageView
                 android:id="@+id/img_monAn"
@@ -36,7 +36,7 @@
                     android:text="Hải Sản"
                     android:layout_marginEnd="20dp"
                     android:layout_alignParentStart="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
