@@ -103,10 +103,8 @@ public class LoginActivity extends AppCompatActivity {
                     } else
                         openFailDialog("Thông tin đăng nhập không chính xác");
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
 

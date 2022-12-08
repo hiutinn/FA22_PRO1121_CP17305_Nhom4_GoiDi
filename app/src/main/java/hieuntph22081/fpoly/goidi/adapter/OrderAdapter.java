@@ -15,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -48,7 +50,7 @@ import hieuntph22081.fpoly.goidi.model.OrderDish;
 import hieuntph22081.fpoly.goidi.model.Table;
 import hieuntph22081.fpoly.goidi.model.User;
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
+public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> implements Filterable {
     Context context;
     List<Order> orders;
     FirebaseDatabase database;
@@ -58,6 +60,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     List<Table> mSelectedTables = new ArrayList<>();
     List<Dish> dishes = new ArrayList<>();
     List<OrderDish> orderDishes = new ArrayList<>();
+    List<Order> orders2 = new ArrayList<>();
     OrderDishAdapter dishAdapter = new OrderDishAdapter(context);
     RecyclerView recyclerView_orderDish;
     private SpinnerAdapter spinnerAdapter;
@@ -65,6 +68,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public OrderAdapter(Context context, List<Order> orders) {
         this.context = context;
         this.orders = orders;
+        this.orders2 = orders;
         this.database = FirebaseDatabase.getInstance();
         this.myRef = database.getReference();
     }
@@ -454,6 +458,36 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public int getItemCount() {
         return orders.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String search = constraint.toString();
+                List<Order> list = new ArrayList<>();
+                if(search.isEmpty()){
+                    orders = orders2;
+                }else{
+                    for(Order order : orders2){
+                        if(order.getDate().toLowerCase().contains(search.toLowerCase())){
+                            list.add(order);
+                        }
+                    }
+                    orders = list;
+                }
+                FilterResults results = new FilterResults();
+                results.values = orders;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                orders = (List<Order>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class OrderViewHolder extends RecyclerView.ViewHolder {

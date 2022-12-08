@@ -1,6 +1,8 @@
 package hieuntph22081.fpoly.goidi.model;
 
-public class OrderDish {
+import java.io.Serializable;
+
+public class OrderDish implements Serializable {
     private Dish dish;
     private int quantity;
 

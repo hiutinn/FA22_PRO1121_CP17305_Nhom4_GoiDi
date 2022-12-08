@@ -123,7 +123,6 @@ public class Top10UserFragment extends Fragment {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     Order order = snapshot1.getValue(Order.class);
                     listUser2 = getlistUserByDate(order);
-                    Log.e("size",listUser2.size()+"");
                     datebaseRef = FirebaseDatabase.getInstance().getReference().child("users/" + order.getUser().getId() + "/id");
                     datebaseRef.addValueEventListener(new ValueEventListener() {
                         @Override

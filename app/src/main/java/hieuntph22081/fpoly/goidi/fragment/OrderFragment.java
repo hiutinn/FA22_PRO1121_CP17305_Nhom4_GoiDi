@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +78,7 @@ public class OrderFragment extends Fragment {
     OrderDishAdapter dishAdapter = new OrderDishAdapter(getContext());
     int mHour, mMinute;
     SpinnerAdapter spinnerAdapter;
+    EditText edt_search;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -104,11 +107,13 @@ public class OrderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerViewOrder = view.findViewById(R.id.recyclerViewOrder);
+        edt_search = view.findViewById(R.id.edtSearch);
         fab = view.findViewById(R.id.fabOrder);
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
         initData();
         fab.setOnClickListener(v -> openOrderDialog());
+        search(edt_search);
     }
 
     private void initData() {
@@ -361,6 +366,27 @@ public class OrderFragment extends Fragment {
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener, mHour, mMinute, true);
         timePickerDialog.show();
+    }
+    private void search(EditText editText){
+        editText.setOnClickListener(v -> {
+            datePickerDialog(editText);
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    adapter.getFilter().filter(editText.getText().toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        });
     }
 
 }

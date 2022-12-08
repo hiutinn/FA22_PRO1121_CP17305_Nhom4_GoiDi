@@ -5,11 +5,30 @@
     android:layout_height="match_parent"
     tools:context=".fragment.OrderFragment"
     android:id="@+id/orderLayout">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewOrder"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/edtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/search_mon"
+            android:drawableStart="@drawable/ic_baseline_search_24"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Tìm kiếm hóa đơn"
+            android:inputType="textPersonName"
+            android:paddingStart="20dp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="312dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewOrder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabOrder"

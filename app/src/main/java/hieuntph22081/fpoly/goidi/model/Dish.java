@@ -1,9 +1,10 @@
 package hieuntph22081.fpoly.goidi.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Dish {
+public class Dish implements Serializable {
     private String id;
     private String ten;
     private double gia;
