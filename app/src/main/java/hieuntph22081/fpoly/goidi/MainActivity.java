@@ -1,5 +1,6 @@
 package hieuntph22081.fpoly.goidi;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -24,6 +25,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import hieuntph22081.fpoly.goidi.fragment.DoanhThuFragment;
 import hieuntph22081.fpoly.goidi.fragment.FeedBackFragment;
@@ -79,7 +83,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id) {
             case R.id.dangXuat:
-                savePreference(userId,"","",true,false);
+                String phone = "";
+                String password = "";
+                boolean status = false;
+                List<Object> chkList;
+                chkList = readPreference();
+                if (chkList.size()>0) {
+                    if (Boolean.parseBoolean(chkList.get(3).toString())) {
+                        phone = chkList.get(1).toString();
+                        password = chkList.get(2).toString();
+                        status = Boolean.parseBoolean(chkList.get(3).toString());
+                    }
+                }
+                savePreference(userId,phone,password,status);
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -110,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.doanhThu:
                 replaceFragment(new DoanhThuFragment());
-                this.setTitle("Quản lý doanh thu");
+                this.setTitle(R.string.nav_doanhThu);
                 break;
             case R.id.quanLyTable:
                 replaceFragment(new TableFragment());
@@ -136,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    void savePreference(String userId, String phone, String pw, boolean isLogout, boolean status) {
+    void savePreference(String userId, String phone, String pw, boolean status) {
         SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
         SharedPreferences.Editor editor = s.edit();
         if (!status) { // Khong luu
@@ -145,12 +161,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             editor.putString("userId",userId);
             editor.putString("phone",phone);
             editor.putString("password",pw);
-            editor.putBoolean("isLogout", isLogout);
             editor.putBoolean("CHK",status);
         }
         editor.commit();
     }
 
+    List<Object> readPreference() {
+        List<Object> ls = new ArrayList<>();
+        SharedPreferences s = getSharedPreferences("MY_FILE", Context.MODE_PRIVATE);
+        ls.add(s.getString("userId",""));
+        ls.add(s.getString("phone",""));
+        ls.add(s.getString("password",""));
+        ls.add(s.getBoolean("CHK",false));
+        return ls;
+    }
 
     public void getToken() {
         FirebaseMessaging.getInstance().getToken()
@@ -164,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     // Log and toast
                     Log.e("TAG", "getToken: " + token );
-                    FirebaseDatabase.getInstance().getReference("users").child(userId+"/token").setValue(token).addOnSuccessListener(unused -> Toast.makeText(MainActivity.this, "Insert successfully", Toast.LENGTH_SHORT).show());
+                    FirebaseDatabase.getInstance().getReference("users").child(userId+"/token").setValue(token);
                 });
     }
 }

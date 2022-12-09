@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,18 +100,26 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             case 0:
                 holder.tvOrderStatus.setText("Đang chờ");
                 holder.tvOrderStatus.setTextColor(Color.YELLOW);
+                holder.btnTable.setBackgroundResource(R.drawable.bg_gray_corner_10);
+                holder.btnTable.setEnabled(true);
                 break;
             case 1:
                 holder.tvOrderStatus.setText("Đang dùng");
                 holder.tvOrderStatus.setTextColor(Color.BLUE);
+                holder.btnTable.setBackgroundResource(R.drawable.bg_gray_corner_10);
+                holder.btnTable.setEnabled(true);
                 break;
             case 2:
                 holder.tvOrderStatus.setText("Đã xong");
                 holder.tvOrderStatus.setTextColor(Color.GREEN);
+                holder.btnTable.setEnabled(false);
+                holder.btnTable.setBackgroundColor(Color.GRAY);
                 break;
             case 3:
                 holder.tvOrderStatus.setText("Hủy");
                 holder.tvOrderStatus.setTextColor(Color.RED);
+                holder.btnTable.setEnabled(false);
+                holder.btnTable.setBackgroundColor(Color.GRAY);
                 break;
         }
         holder.tvOrderNoP.setText(order.getNumberOfPeople() + " người");
@@ -284,6 +293,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         EditText edtOrderEndTime = dialog.findViewById(R.id.edtOrderEndTime);
         edtOrderEndTime.setText(order.getEndTime());
         edtOrderEndTime.setOnClickListener(v -> timePickerDialog(edtOrderEndTime));
+        EditText edtOrderNoP = dialog.findViewById(R.id.edtOrderNoP);
+        edtOrderNoP.setText(order.getNumberOfPeople() + "");
+
 
         Spinner spnOrderStatus = dialog.findViewById(R.id.spnOrderStatus);
         List<String> statuses = new ArrayList<>();
@@ -322,12 +334,40 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
 
         btnSave.setOnClickListener(v -> {
+            if (edtOrderDate.getText().toString().trim().length() == 0
+                    || edtOrderStartTime.getText().toString().trim().length() == 0
+                    || edtOrderEndTime.getText().toString().trim().length() == 0
+                    || edtOrderNoP.getText().toString().trim().length() == 0) {
+                openFailDialog("Không để trống dữ liệu");
+                return;
+            }
+
+//            if (!validateTime(edtOrderStartTime.getText().toString(), edtOrderDate.getText().toString())) {
+//                openFailDialog("Ngày và giờ sai định dạng");
+//                return;
+//            }
+//
+            SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
+            String mTime = edtOrderEndTime.getText().toString().trim();
+            try {
+                Date startTime = parser.parse(edtOrderStartTime.getText().toString().trim());
+                Date endTime = parser.parse(mTime);
+                if (endTime.compareTo(startTime) <= 0) {
+                    openFailDialog("Ngày và giờ sai định dạng");
+                    return;
+                }
+            } catch (ParseException e) {
+                openFailDialog("Ngày và giờ sai định dạng");
+                e.printStackTrace();
+                return;
+            }
             order.setUser(users.get(spnOrderUser.getSelectedItemPosition()));
             order.setDate(edtOrderDate.getText().toString());
             order.setStartTime(edtOrderStartTime.getText().toString());
             order.setEndTime(edtOrderEndTime.getText().toString());
             order.setStatus(spnOrderStatus.getSelectedItemPosition());
             order.setDishes(orderDishes);
+            order.setNumberOfPeople(Integer.parseInt(edtOrderNoP.getText().toString().trim()));
             order.setTotal();
             myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(unused -> {
                 openSuccessDialog("Cập nhật thành công");
@@ -335,6 +375,39 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             });
         });
         btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    private boolean validateTime (String time, String date) {
+        SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String mTime = date + " " + time;
+        try {
+            Date currentTime = Calendar.getInstance().getTime();
+            Date ten = parser.parse(mTime);
+            if (ten.compareTo(currentTime) < 0) {
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(true);
         dialog.show();
     }
