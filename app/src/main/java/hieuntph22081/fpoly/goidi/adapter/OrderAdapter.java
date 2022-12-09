@@ -83,6 +83,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
+        holder.btnTable.setText("Bàn");
         String tablesStr = "Bàn: ";
         List<Table> mTables = order.getTables();
         if (mTables != null) {
@@ -130,7 +131,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         adapter.setData(order.getDishes());
         holder.recyclerViewDishes.setAdapter(adapter);
         holder.btnTable.setOnClickListener(v -> {
-            openChooseTableDialog(order);
+            openChooseTableDialog(position);
 //            holder.btnTable.setText(mSelectedTables.size()+"");
         });
 
@@ -156,7 +157,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     }
 
-    private void openChooseTableDialog(Order order) {
+    private void openChooseTableDialog(int position) {
         Dialog dialog = new Dialog(context);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -164,15 +165,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
 
-        getFilteredTablesList(dialog, order);
+        getFilteredTablesList(dialog, orders.get(position));
 
         dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
 
-            order.setTables(mSelectedTables);
-            myRef.child("orders").child(order.getId()).updateChildren(order.toMap()).addOnSuccessListener(unused
+            orders.get(position).setTables(mSelectedTables);
+            myRef.child("orders").child(orders.get(position).getId()).updateChildren(orders.get(position).toMap()).addOnSuccessListener(unused
                     -> openSuccessDialog("Chọn bàn thành công"));
 
             notifyDataSetChanged();
+            mSelectedTables.clear();
             dialog.dismiss();
         });
 
