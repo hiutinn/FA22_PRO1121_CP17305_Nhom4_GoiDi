@@ -107,7 +107,7 @@ public class OrderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerViewOrder = view.findViewById(R.id.recyclerViewOrder);
-        edt_search = view.findViewById(R.id.edtSearch);
+        edt_search = view.findViewById(R.id.edtSearch_order);
         fab = view.findViewById(R.id.fabOrder);
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();

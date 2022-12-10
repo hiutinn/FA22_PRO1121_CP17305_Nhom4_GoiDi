@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,12 +35,13 @@ import java.util.List;
 
 import hieuntph22081.fpoly.goidi.R;
 import hieuntph22081.fpoly.goidi.fragment.UserFragment;
+import hieuntph22081.fpoly.goidi.model.Order;
 import hieuntph22081.fpoly.goidi.model.User;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> implements Filterable {
     private Context context;
     private List<User> list;
-
+    private List<User> userList;
     EditText edtTenTv, edtPhone;
     Button btnSave, btnCancel;
     RadioButton rdoRoleAdmin, rdoRoleClient;
@@ -46,8 +50,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public UserAdapter(Context context) {
         this.context=context;
     }
-    public void setData(List<User> list) {
-        this.list=list;
+    public void setData(List<User> list1) {
+        this.list=list1;
+        this.userList = list1;
         notifyDataSetChanged();
     }
 
@@ -87,6 +92,37 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             return list.size();
         }
         return 0;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String search = constraint.toString();
+                List<User> users = new ArrayList<>();
+
+                if(search.isEmpty()){
+                    list = userList;
+                }else{
+                    for(User user : userList){
+                        if(user.getPhone().toLowerCase().contains(search)){
+                            users.add(user);
+                        }
+                    }
+                    list = users;
+                }
+                FilterResults results = new FilterResults();
+                results.values = list;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                list = (List<User>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 

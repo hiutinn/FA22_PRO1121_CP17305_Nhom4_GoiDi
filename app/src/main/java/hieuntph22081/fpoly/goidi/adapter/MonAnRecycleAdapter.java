@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,16 +29,49 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import hieuntph22081.fpoly.goidi.R;
 import hieuntph22081.fpoly.goidi.model.Dish;
 
-public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapter.userViewHolder> {
+public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapter.userViewHolder> implements Filterable {
     private List<Dish> list;
+    private List<Dish> dishList;
     private Context context;
     private IClickListener iClickListener;
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String search = constraint.toString();
+                List<Dish> dishes = new ArrayList<>();
+                if(search.isEmpty()){
+                    list = dishList;
+                }else{
+                    for(Dish dish : dishList){
+                        if(dish.getTen().toLowerCase().contains(search.toLowerCase())){
+                            dishes.add(dish);
+                        }
+                    }
+                    list = dishes;
+                }
+                FilterResults results =new FilterResults();
+                results.values = list;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                list = (List<Dish>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public interface IClickListener{
         void OnClickUpdateItem(Dish dish);
@@ -49,6 +84,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
 
     public void setData(List<Dish> list){
         this.list = list;
+        this.dishList = list;
         notifyDataSetChanged();
     }
 

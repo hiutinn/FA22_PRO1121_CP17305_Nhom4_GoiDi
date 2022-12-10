@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +73,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference databaseRef;
     private Uri uri;
     private int check = -1;
+    private EditText edt_search;
     private List<Dish> listDish = new ArrayList<>();
 
     public MonAnFragment() {
@@ -95,6 +98,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         actionButton = view.findViewById(R.id.btn_float_themMonAn);
         actionButton.setOnClickListener(this);
         actionButton.setColorFilter(Color.WHITE);
+        edt_search = view.findViewById(R.id.edtSearch_dish);
         recyclerView = view.findViewById(R.id.recycle_monAn);
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Dish");
         getListDishFromFireBase();
@@ -103,6 +107,23 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+
+        edt_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(edt_search.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     public void getListDishFromFireBase(){
@@ -172,6 +193,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                check =-1;
             }
         });
         AlertDialog alertDialog = builder.create();

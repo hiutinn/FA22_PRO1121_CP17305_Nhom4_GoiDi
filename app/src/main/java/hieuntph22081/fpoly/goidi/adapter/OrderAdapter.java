@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -467,6 +468,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             protected FilterResults performFiltering(CharSequence constraint) {
                 String search = constraint.toString();
                 List<Order> list = new ArrayList<>();
+
                 if(search.isEmpty()){
                     orders = orders2;
                 }else{

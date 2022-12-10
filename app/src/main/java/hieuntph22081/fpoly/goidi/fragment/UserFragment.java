@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,22 +50,35 @@ public class UserFragment extends Fragment {
     RecyclerView lvThanhVien;
     List<User> list;
     UserAdapter adapter;
-
     FloatingActionButton fab;
-    EditText edtTenTv, edtPhone, edtPassword;
+    EditText edtTenTv, edtPhone, edtPassword ,edtSearch_user;
     Button btnSave, btnCancel;
     RadioButton rdoRoleAdmin, rdoRoleClient;
     RadioGroup rdoRole;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user, container, false);
-
+        edtSearch_user = v.findViewById(R.id.edtSearch_user);
         lvThanhVien = v.findViewById(R.id.lvUser);
         fab = v.findViewById(R.id.fabTV);
         capNhatLv();
+        edtSearch_user.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(edtSearch_user.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         fab.setOnClickListener(v1 -> {
             openDialog(0);//bang = thi insert
         });
@@ -77,7 +92,6 @@ public class UserFragment extends Fragment {
         lvThanhVien.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         lvThanhVien.setAdapter(adapter);
         getListUser();
-
     }
 
 
