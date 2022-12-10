@@ -52,14 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         List<Object> chkList;
         chkList = readPreference();
         if (chkList.size()>0) {
-            if (!Boolean.parseBoolean(chkList.get(3).toString())) {
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("userId", chkList.get(0).toString());
-                intent.putExtra("bundle",bundle);
-                startActivity(intent);
-                finish();
-            } else {
+            if (Boolean.parseBoolean(chkList.get(3).toString())) {
                 txtMaTT.setText(chkList.get(1).toString());
                 txtPassword.setText(chkList.get(2).toString());
                 chkRemember.setChecked(Boolean.parseBoolean(chkList.get(3).toString()));
@@ -92,14 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     if (check) {
-                        savePreference(userId,phone,pw,!status,status);
+                        savePreference(userId,phone,pw,status);
                         openSuccessDialog("Đăng nhập thành công");
-                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("userId", userId);
-                        intent.putExtra("bundle",bundle);
-                        startActivity(intent);
-                        finish();
                     } else
                         openFailDialog("Thông tin đăng nhập không chính xác");
                 }
@@ -111,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    void savePreference(String userId, String phone, String pw, boolean isLogout, boolean status) {
+    void savePreference(String userId, String phone, String pw, boolean status) {
         SharedPreferences s = getSharedPreferences("MY_FILE",MODE_PRIVATE);
         SharedPreferences.Editor editor = s.edit();
         if (!status) { // Khong luu
@@ -120,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString("userId",userId);
             editor.putString("phone",phone);
             editor.putString("password",pw);
-            editor.putBoolean("isLogout", isLogout);
             editor.putBoolean("CHK",status);
         }
         editor.commit();
@@ -132,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
         ls.add(s.getString("userId",""));
         ls.add(s.getString("phone",""));
         ls.add(s.getString("password",""));
-        ls.add(s.getBoolean("isLogout",true));
         ls.add(s.getBoolean("CHK",false));
         return ls;
     }
@@ -147,6 +132,12 @@ public class LoginActivity extends AppCompatActivity {
         TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
         tvNotifyContent.setText(text);
         dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("userId", userId);
+            intent.putExtra("bundle",bundle);
+            startActivity(intent);
+            finish();
             dialog.dismiss();
         });
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);

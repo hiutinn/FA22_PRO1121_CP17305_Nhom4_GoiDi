@@ -41,9 +41,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -193,7 +195,6 @@ public class OrderFragment extends Fragment {
         myRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 if(snapshot.getValue() != null){
                     for (DataSnapshot s : snapshot.getChildren()) {
                         User user = s.getValue(User.class);
@@ -203,7 +204,7 @@ public class OrderFragment extends Fragment {
                     for (User u : users) {
                         userNames.add(u.getName());
                     }
-                    spnOrderUser.setAdapter(new ArrayAdapter<>(getActivity(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
+                    spnOrderUser.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
                 }
             }
 
@@ -220,6 +221,8 @@ public class OrderFragment extends Fragment {
         edtOrderStartTime.setOnClickListener(v -> timePickerDialog(edtOrderStartTime));
         EditText edtOrderEndTime = dialog.findViewById(R.id.edtOrderEndTime);
         edtOrderEndTime.setOnClickListener(v -> timePickerDialog(edtOrderEndTime));
+        EditText edtOrderNoP = dialog.findViewById(R.id.edtOrderNoP);
+
 
         Spinner spnOrderStatus = dialog.findViewById(R.id.spnOrderStatus);
         List<String> statuses = new ArrayList<>();
@@ -245,6 +248,33 @@ public class OrderFragment extends Fragment {
 
 
         btnSave.setOnClickListener(v -> {
+            if (edtOrderDate.getText().toString().trim().length() == 0
+            || edtOrderStartTime.getText().toString().trim().length() == 0
+            || edtOrderEndTime.getText().toString().trim().length() == 0
+            || edtOrderNoP.getText().toString().trim().length() == 0) {
+                openFailDialog("Không để trống dữ liệu");
+                return;
+            }
+
+//            if (!validateTime(edtOrderStartTime.getText().toString(), edtOrderDate.getText().toString())) {
+//                openFailDialog("Ngày và giờ sai định dạng");
+//                return;
+//            }
+
+            SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
+            String mTime = edtOrderEndTime.getText().toString().trim();
+            try {
+                Date startTime = parser.parse(edtOrderStartTime.getText().toString().trim());
+                Date endTime = parser.parse(mTime);
+                if (endTime.compareTo(startTime) <= 0) {
+                    openFailDialog("Ngày và giờ sai định dạng");
+                    return;
+                }
+            } catch (ParseException e) {
+                openFailDialog("Ngày và giờ sai định dạng");
+                e.printStackTrace();
+                return;
+            }
             Order order = new Order();
             order.setId("order" + Calendar.getInstance().getTimeInMillis());
             order.setUser(users.get(spnOrderUser.getSelectedItemPosition()));
@@ -253,19 +283,34 @@ public class OrderFragment extends Fragment {
             order.setEndTime(edtOrderEndTime.getText().toString());
             order.setStatus(spnOrderStatus.getSelectedItemPosition());
             order.setDishes(orderDishes);
+            order.setNumberOfPeople(Integer.parseInt(edtOrderNoP.getText().toString().trim()));
             order.setTotal();
 
-            myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Toast.makeText(getContext(), "Thêm hóa đơn thành công!", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
+            myRef.child("orders").child(order.getId()).setValue(order).addOnSuccessListener(unused -> {
+                openSuccessDialog("Thêm hóa đơn thành công");
+                dialog.dismiss();
             });
         });
         btnCancel.setOnClickListener(v -> dialog.dismiss());
         dialog.setCancelable(true);
         dialog.show();
+    }
+
+
+    private boolean validateTime (String time, String date) {
+        SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String mTime = date + " " + time;
+        try {
+            Date currentTime = Calendar.getInstance().getTime();
+            Date ten = parser.parse(mTime);
+            if (ten.compareTo(currentTime) < 0) {
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     protected List<OrderDish> openDishDialog() {
@@ -389,4 +434,39 @@ public class OrderFragment extends Fragment {
         });
     }
 
+
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    public void openSuccessDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_success_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
 }
