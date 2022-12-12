@@ -42,6 +42,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
     private List<Dish> dishList;
     private Context context;
     private IClickListener iClickListener;
+    private int layout;
 
     @Override
     public Filter getFilter() {
@@ -77,8 +78,9 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
         void OnClickUpdateItem(Dish dish);
     }
 
-    public MonAnRecycleAdapter(Context context,IClickListener listener) {
+    public MonAnRecycleAdapter(Context context, int layout,IClickListener listener) {
         this.context = context;
+        this.layout = layout;
         this.iClickListener = listener;
     }
 
@@ -91,7 +93,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
     @NonNull
     @Override
     public userViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_monan,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout,parent,false);
         return new userViewHolder(view);
     }
 

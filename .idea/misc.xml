@@ -33,6 +33,7 @@
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable-v24/bg_gray_corner_10.xml" value="0.163" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/background_corner20_bordergray.xml" value="0.207" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/background_login.xml" value="0.244" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/bg_white_corner_16.xml" value="0.174" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/csstomtron2.xml" value="0.142" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/ic_dish.xml" value="0.1" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/drawable/ic_feedback.xml" value="0.1" />
@@ -50,6 +51,7 @@
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_order.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_success_notification.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_table.xml" value="0.2520833333333333" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_top_user.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/dialog_user.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/fragment_demo.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/fragment_doanh_thu.xml" value="0.253125" />
@@ -66,6 +68,8 @@
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_order.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_recycle_feedback.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_table.xml" value="0.2520833333333333" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_top_dish.xml" value="0.253125" />
+        <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_top_user.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/item_user.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/layout_dialog_feedback.xml" value="0.253125" />
         <entry key="..\:/Users/ADMIN/Documents/DU_AN_1/FA22_PRO1121_CP17305_Nhom4_GoiDi/app/src/main/res/layout/layout_item_demo.xml" value="0.2520833333333333" />

@@ -1,7 +1,10 @@
 package hieuntph22081.fpoly.goidi.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -78,6 +83,20 @@ public class DoanhThuFragment extends Fragment {
             datePickerDialog(calendar,ed_denNgay);
         });
         view.findViewById(R.id.btn_doanhThu).setOnClickListener(v -> {
+            if (ed_tuNgay.getText().toString().trim().length() == 0
+                    || ed_denNgay.getText().toString().trim().length() == 0) {
+                openFailDialog("Bạn chưa nhập ngày!");
+                return;
+            }
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                simpleDateFormat.parse(ed_tuNgay.getText().toString());
+                simpleDateFormat.parse(ed_denNgay.getText().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                openFailDialog("Ngày sai định dạng!");
+                return;
+            }
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference();
             myRef.child("orders").addValueEventListener(new ValueEventListener() {
@@ -133,5 +152,22 @@ public class DoanhThuFragment extends Fragment {
         String pattern="###,###.### VNĐ";
         DecimalFormat myFormatter = new DecimalFormat(pattern);
         return myFormatter.format(money);
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

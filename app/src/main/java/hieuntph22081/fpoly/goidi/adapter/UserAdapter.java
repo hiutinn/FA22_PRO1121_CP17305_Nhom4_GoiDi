@@ -46,9 +46,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     Button btnSave, btnCancel;
     RadioButton rdoRoleAdmin, rdoRoleClient;
     RadioGroup rdoRole;
+    int layout;
 
-    public UserAdapter(Context context) {
+    public UserAdapter(Context context, int layout) {
         this.context=context;
+        this.layout = layout;
     }
     public void setData(List<User> list1) {
         this.list=list1;
@@ -59,7 +61,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new UserViewHolder(LayoutInflater.from(context).inflate(R.layout.item_user,parent,false));
+        return new UserViewHolder(LayoutInflater.from(context).inflate(layout,parent,false));
     }
 
     @Override
