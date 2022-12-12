@@ -1,6 +1,7 @@
 package hieuntph22081.fpoly.goidi.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -100,7 +101,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         switch (order.getStatus()) {
             case 0:
                 holder.tvOrderStatus.setText("Đang chờ");
-                holder.tvOrderStatus.setTextColor(Color.YELLOW);
+                holder.tvOrderStatus.setTextColor(Color.YELLOW );
                 holder.btnTable.setBackgroundResource(R.drawable.bg_gray_corner_10);
                 holder.btnTable.setEnabled(true);
                 break;
@@ -119,6 +120,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             case 3:
                 holder.tvOrderStatus.setText("Hủy");
                 holder.tvOrderStatus.setTextColor(Color.RED);
+                holder.imgDelete.setVisibility(View.VISIBLE);
+                holder.imgDelete.setOnClickListener(v -> {
+                    deleteOrder(order.getId());
+                });
                 holder.btnTable.setEnabled(false);
                 holder.btnTable.setBackgroundColor(Color.GRAY);
                 break;
@@ -157,6 +162,24 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     }
 
+    public void deleteOrder(final String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete");
+        builder.setMessage("Bạn có muốn xóa không ?");
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("order");
+            myRef.child(id).removeValue((error, ref)
+                    -> openSuccessDialog("Xóa thành công"));
+            dialog.cancel();
+            notifyDataSetChanged();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
     private void openChooseTableDialog(int position) {
         Dialog dialog = new Dialog(context);
 
@@ -170,10 +193,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         dialog.findViewById(R.id.btnChoose).setOnClickListener(v -> {
 
             orders.get(position).setTables(mSelectedTables);
-            myRef.child("orders").child(orders.get(position).getId()).updateChildren(orders.get(position).toMap()).addOnSuccessListener(unused
-                    -> openSuccessDialog("Chọn bàn thành công"));
-
-            notifyDataSetChanged();
+            myRef.child("orders").child(orders.get(position).getId()).updateChildren(orders.get(position).toMap());
             mSelectedTables.clear();
             dialog.dismiss();
         });
@@ -267,7 +287,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot s : snapshot.getChildren()) {
                     User user = s.getValue(User.class);
-                    users.add(user);
+                    if (user.getRole() == 1)
+                        users.add(user);
                 }
                 List<String> userNames = new ArrayList<>();
                 for (User u : users) {
@@ -344,11 +365,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 return;
             }
 
-//            if (!validateTime(edtOrderStartTime.getText().toString(), edtOrderDate.getText().toString())) {
-//                openFailDialog("Ngày và giờ sai định dạng");
-//                return;
-//            }
-//
             SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
             String mTime = edtOrderEndTime.getText().toString().trim();
             try {
@@ -466,13 +482,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 return;
             }
             orderDish.setDish(dishes.get(spnDish.getSelectedItemPosition()));
-            for (OrderDish orderDish1 : orderDishes) {
-                if (orderDish1.getDish().getId().equals(orderDish.getDish().getId())) {
-                    orderDish1.setQuantity(orderDish1.getQuantity() + orderDish.getQuantity());
-                    dishAdapter.setData(orderDishes);
-                    return;
-                }
+            if (orderDishes == null) {
+                orderDishes = new ArrayList<>();
             }
+                for (OrderDish orderDish1 : orderDishes) {
+                    if (orderDish1.getDish().getId().equals(orderDish.getDish().getId())) {
+                        orderDish1.setQuantity(orderDish1.getQuantity() + orderDish.getQuantity());
+                        dishAdapter.setData(orderDishes);
+                        return;
+                    }
+                }
             orderDishes.add(orderDish);
             dishAdapter.setData(orderDishes);
         });
@@ -567,7 +586,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     public class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView tvOrderTable, tvOrderDate, tvOrderTime, tvOrderStatus, tvOrderUser, tvOrderTotal, tvOrderNoP;
-        ImageView imgEdit, imgDropDown;
+        ImageView imgEdit, imgDropDown, imgDelete;
         RecyclerView recyclerViewDishes;
         RelativeLayout contentLayout;
         Button btnTable;
@@ -585,6 +604,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             recyclerViewDishes = itemView.findViewById(R.id.recyclerViewDishes);
             btnTable = itemView.findViewById(R.id.btnTable);
             tvOrderNoP = itemView.findViewById(R.id.tvOrderNoP);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
         }
     }
 

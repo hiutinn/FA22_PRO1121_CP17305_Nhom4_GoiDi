@@ -15,7 +15,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/layout1"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -88,6 +88,15 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="13dp"
                     android:src="@drawable/ic_baseline_edit_24" />
+                <ImageView
+                    android:id="@+id/imgDelete"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="13dp"
+                    android:src="@drawable/dish_delete"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -106,17 +115,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgDropDown"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tvOrderUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:textStyle="bold"
+                android:layout_marginBottom="20dp"
                 android:text="Khách hàng: Hiếu"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvOrderNoP"
@@ -125,40 +134,43 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="10dp"
                 android:text="Khách hàng: Hiếu"
-                android:textStyle="bold"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:id="@+id/listTitle"
-                android:layout_below="@+id/tvOrderUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tvOrderUser"
                 android:layout_marginBottom="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:text="Món"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:layout_alignParentStart="true"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:text="Giá"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:layout_centerHorizontal="true"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:text="Số lượng"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:layout_alignParentEnd="true"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -166,8 +178,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/listTitle"
-                android:background="@color/white"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_white_corner_16">
 
             </androidx.recyclerview.widget.RecyclerView>
 

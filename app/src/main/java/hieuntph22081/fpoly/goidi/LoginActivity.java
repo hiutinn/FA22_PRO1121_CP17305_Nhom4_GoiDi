@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -66,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
         String phone = txtMaTT.getText().toString();
         String pw = txtPassword.getText().toString();
         boolean status = chkRemember.isChecked();
-
         if (phone.length() == 0 || pw.length() == 0) {
             openFailDialog("Không để trống thông tin");
         } else {
@@ -86,7 +86,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (check) {
                         savePreference(userId,phone,pw,status);
-                        openSuccessDialog("Đăng nhập thành công");
+//                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userId", userId);
+                        intent.putExtra("bundle",bundle);
+                        startActivity(intent);
+                        finish();
                     } else
                         openFailDialog("Thông tin đăng nhập không chính xác");
                 }
@@ -132,13 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
         tvNotifyContent.setText(text);
         dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("userId", userId);
-            intent.putExtra("bundle",bundle);
-            startActivity(intent);
-            finish();
-            dialog.dismiss();
+
         });
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(true);

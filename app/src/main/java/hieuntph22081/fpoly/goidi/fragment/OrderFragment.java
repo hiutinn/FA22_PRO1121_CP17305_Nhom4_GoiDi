@@ -25,15 +25,11 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,16 +51,10 @@ import hieuntph22081.fpoly.goidi.adapter.OrderDishAdapter;
 import hieuntph22081.fpoly.goidi.adapter.SpinnerAdapter;
 import hieuntph22081.fpoly.goidi.model.Dish;
 import hieuntph22081.fpoly.goidi.model.Order;
-import hieuntph22081.fpoly.goidi.model.Order;
 import hieuntph22081.fpoly.goidi.model.OrderDish;
 import hieuntph22081.fpoly.goidi.model.Table;
 import hieuntph22081.fpoly.goidi.model.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OrderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OrderFragment extends Fragment {
     RecyclerView recyclerViewOrder;
     RecyclerView recyclerView_orderDish;
@@ -84,13 +74,6 @@ public class OrderFragment extends Fragment {
 
     public OrderFragment() {
         // Required empty public constructor
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static OrderFragment newInstance() {
-        OrderFragment fragment = new OrderFragment();
-       
-        return fragment;
     }
 
     @Override
@@ -116,6 +99,7 @@ public class OrderFragment extends Fragment {
         initData();
         fab.setOnClickListener(v -> openOrderDialog());
         search(edt_search);
+        Log.e("TAG", "fragment order: ");
     }
 
     private void initData() {
@@ -198,13 +182,15 @@ public class OrderFragment extends Fragment {
                 if(snapshot.getValue() != null){
                     for (DataSnapshot s : snapshot.getChildren()) {
                         User user = s.getValue(User.class);
-                        users.add(user);
+                        if (user.getRole() == 1)
+                            users.add(user);
                     }
                     List<String> userNames = new ArrayList<>();
                     for (User u : users) {
                         userNames.add(u.getName());
                     }
-                    spnOrderUser.setAdapter(new ArrayAdapter<>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames));
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, userNames);
+                    spnOrderUser.setAdapter(adapter);
                 }
             }
 

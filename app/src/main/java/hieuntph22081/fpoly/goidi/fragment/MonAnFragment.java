@@ -102,7 +102,7 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         recyclerView = view.findViewById(R.id.recycle_monAn);
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Dish");
         getListDishFromFireBase();
-        adapter = new MonAnRecycleAdapter(getActivity(), dish -> openDiaLogUpdateDish(dish));
+        adapter = new MonAnRecycleAdapter(getActivity(),R.layout.item_monan, dish -> openDiaLogUpdateDish(dish));
         adapter.setData(listDish);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);

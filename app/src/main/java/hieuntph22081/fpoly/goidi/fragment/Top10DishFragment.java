@@ -1,6 +1,9 @@
 package hieuntph22081.fpoly.goidi.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
@@ -57,11 +63,6 @@ public class Top10DishFragment extends Fragment {
     }
 
 
-    public static Top10DishFragment newInstance() {
-        Top10DishFragment fragment = new Top10DishFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,14 +80,10 @@ public class Top10DishFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         datebaseRef = FirebaseDatabase.getInstance().getReference();
         recyclerView = view.findViewById(R.id.recyclerViewTop10Dish);
-        adapter = new MonAnRecycleAdapter(getContext(), dish -> {
+        adapter = new MonAnRecycleAdapter(getContext(), R.layout.item_top_dish, dish -> {
         });
 
         //adapter.setData(dishes);
-
-
-
-
         ed_tuNgay = view.findViewById(R.id.ed_TopDish_tuNgay);
         ed_denNgay = view.findViewById(R.id.ed_TopDish_denNgay);
         Calendar calendar = Calendar.getInstance();
@@ -107,6 +104,20 @@ public class Top10DishFragment extends Fragment {
     }
 
     public void getTop10Dish() {
+        if (ed_tuNgay.getText().toString().trim().length() == 0
+                || ed_denNgay.getText().toString().trim().length() == 0) {
+            openFailDialog("Bạn chưa nhập ngày!");
+            return;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            simpleDateFormat.parse(ed_tuNgay.getText().toString());
+            simpleDateFormat.parse(ed_denNgay.getText().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            openFailDialog("Ngày sai định dạng!");
+            return;
+        }
         datebaseRef.child("orders").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -211,5 +222,22 @@ public class Top10DishFragment extends Fragment {
             editText.setText(simpleDateFormat.format(calendar.getTime()));
         }, year, month, day);
         datePickerDialog.show();
+    }
+
+    public void openFailDialog (String text) {
+        Dialog dialog = new Dialog(getContext());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fail_notification);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvNotifyContent = dialog.findViewById(R.id.tvNotifyContent);
+        tvNotifyContent.setText(text);
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }
