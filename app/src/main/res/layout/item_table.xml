@@ -34,6 +34,14 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="13dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_edit_24"/>
+
+        <ImageView
             android:id="@+id/imgDelete"
             android:layout_width="10dp"
             android:layout_height="match_parent"
