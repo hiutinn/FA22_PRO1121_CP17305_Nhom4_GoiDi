@@ -198,13 +198,13 @@ public class MonAnFragment extends Fragment implements View.OnClickListener {
         });
         AlertDialog alertDialog = builder.create();
         linear_camera.setOnClickListener(v -> {
-            cameraIntent();
             check = 1;
+            cameraIntent();
             alertDialog.cancel();
         });
         linear_gallery.setOnClickListener(v -> {
+            check = 0;
             galleryIntent();
-            check =0;
             alertDialog.cancel();
         });
         alertDialog.show();

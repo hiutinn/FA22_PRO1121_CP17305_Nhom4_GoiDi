@@ -41,7 +41,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
         myRef = mDatabase.getReference("tables");
     }
 
-
     public void setTableList(List<Table> tableList) {
         TableList = tableList;
         notifyDataSetChanged();
@@ -63,9 +62,8 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
             return;
         holder.tvNumber.setText("Bàn số " + table.getNumber());
         holder.tvSeat.setText("Chỗ ngồi: " + table.getSeat());
-        holder.itemView.setOnLongClickListener(v -> {
+        holder.imgEdit.setOnClickListener(v -> {
             diaLogTable(table);
-            return true;
         });
         holder.imgDelete.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -124,12 +122,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHodler> 
 
     public class ViewHodler extends RecyclerView.ViewHolder {
         TextView tvNumber, tvSeat;
-        ImageView imgDelete;
+        ImageView imgDelete, imgEdit;
         public ViewHodler(@NonNull View itemView) {
             super(itemView);
             tvNumber = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.tvNumber);
             tvSeat = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.tvSeat);
             imgDelete = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.imgDelete);
+            imgEdit = itemView.findViewById(hieuntph22081.fpoly.goidi.R.id.imgEdit);
         }
     }
     public void openSuccessDialog (String text) {

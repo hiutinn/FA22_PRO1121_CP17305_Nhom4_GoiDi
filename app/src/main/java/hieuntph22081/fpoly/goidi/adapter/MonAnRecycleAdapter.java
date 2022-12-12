@@ -114,7 +114,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
             Log.e("id",dish.getId());
 
         });
-        holder.itemView.setOnClickListener(v -> {
+        holder.imgEdit.setOnClickListener(v -> {
             iClickListener.OnClickUpdateItem(dish);
         });
     }
@@ -134,7 +134,7 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
     }
 
     public class userViewHolder extends RecyclerView.ViewHolder {
-        ImageView img_monAn,img_xoaMonAn;
+        ImageView img_monAn,img_xoaMonAn, imgEdit;
         TextView tv_tenMonAn,tv_gia;
         public userViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -142,28 +142,18 @@ public class MonAnRecycleAdapter extends RecyclerView.Adapter<MonAnRecycleAdapte
             tv_tenMonAn = itemView.findViewById(R.id.tv_ten_mon);
             tv_gia = itemView.findViewById(R.id.tv_gia);
             img_xoaMonAn = itemView.findViewById(R.id.img_xoaMonAn);
+            imgEdit = itemView.findViewById(R.id.imgEdit);
         }
     }
     public void diaLogDelete(Dish dish){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Thông báo");
         builder.setMessage("Bạn có muốn xóa không");
-        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Dish/"+dish.getId());
-                databaseRef.removeValue(new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        openSuccessDialog("Xóa thành công");
-                    }
-                });
-            }
+        builder.setPositiveButton("Xóa", (dialog, which) -> {
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference().child("Dish/"+dish.getId());
+            databaseRef.removeValue((error, ref) -> openSuccessDialog("Xóa thành công"));
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        builder.setNegativeButton("Hủy", (dialog, which) -> {
         });
         builder.show();
     }

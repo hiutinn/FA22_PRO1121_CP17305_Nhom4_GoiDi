@@ -120,10 +120,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             case 3:
                 holder.tvOrderStatus.setText("Hủy");
                 holder.tvOrderStatus.setTextColor(Color.RED);
-                holder.imgDelete.setVisibility(View.VISIBLE);
-                holder.imgDelete.setOnClickListener(v -> {
-                    deleteOrder(order.getId());
-                });
+//                holder.imgDelete.setVisibility(View.VISIBLE);
+//                holder.imgDelete.setOnClickListener(v -> {
+//                    deleteOrder(order.getId());
+//                });
                 holder.btnTable.setEnabled(false);
                 holder.btnTable.setBackgroundColor(Color.GRAY);
                 break;

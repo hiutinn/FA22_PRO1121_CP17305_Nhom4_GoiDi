@@ -82,9 +82,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             deleteUser(user.getId());
         });
 
-        holder.itemView.setOnLongClickListener(v -> {
+        holder.imgEdit.setOnClickListener(v -> {
             openDialog(user);
-            return true;
         });
     }
 
@@ -130,13 +129,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     public class UserViewHolder extends RecyclerView.ViewHolder {
         TextView tvTenTV, tvRole, tvPhone;
-        ImageView imgDelete;
+        ImageView imgDelete, imgEdit;
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTenTV = itemView.findViewById(R.id.tvTenTV);
             tvRole = itemView.findViewById(R.id.tvRole);
             tvPhone = itemView.findViewById(R.id.tvPhone);
             imgDelete = itemView.findViewById(R.id.imgDelete);
+            imgEdit = itemView.findViewById(R.id.imgEdit);
         }
     }
 
